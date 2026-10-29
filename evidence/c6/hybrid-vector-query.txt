@@ -1,0 +1,5 @@
+Direct retrieval check inside the API container:
+backend= hybrid(tfidf+vectors)
+vector_ids= ['ipc_mah_v2_p0070_c01', 'cdsco_rules_p0218_c01', 'ipc_mah_v2_p0077_c01', 'cdsco_rules_p0211_c01', 'ipc_mah_v2_p0033_c01']
+hybrid_ids= ['ipc_mah_v2_p0070_c01', 'ipc_mah_v2_p0077_c01', 'cdsco_rules_p0222_c03', 'ipc_mah_v2_p0031_c02', 'ipc_mah_v2_p0037_c01']
+hybrid_sources= [('ipc_mah_v2', 70), ('ipc_mah_v2', 77), ('cdsco_rules', 222), ('ipc_mah_v2', 31), ('ipc_mah_v2', 37)]

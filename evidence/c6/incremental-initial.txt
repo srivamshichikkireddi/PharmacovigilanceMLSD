@@ -1,0 +1,25 @@
+parsed cdsco_rules: 264 pages -> 950 chunks
+parsed ipc_mah_v2: 86 pages -> 171 chunks
+parsed tegretol_us_pi: 25 pages -> 95 chunks
+docker : Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+At line:14 char:517
++ ... DER=none'); docker run @common --mount ('type=bind,source='+ (Join-Pa ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Failed to send ...ut 3 were given:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+Failed to send telemetry event CollectionGetEvent: capture() takes 1 positional argument but 3 were given
+embedded 1216 new/changed chunks, removed 0, model=sentence-transformers/all-MiniLM-L6-v2
+{
+  "built_utc": "2026-10-29T13:28:07.706463+00:00",
+  "chunker_version": "2",
+  "chunks": 1216,
+  "reparsed_documents": 3,
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "embedded_chunks": 1216,
+  "errors": [],
+  "build_seconds": 123.81,
+  "throughput_chunks_per_s": 9.8,
+  "corpus_version": "17027899456b"
+}

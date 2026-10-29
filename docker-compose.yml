@@ -1,0 +1,117 @@
+# One command from a clean clone:   cp .env.example .env && docker compose up --build
+# Scale the agents:                  docker compose up --build --scale agent-worker=3
+x-app-env: &app-env
+  REDIS_URL: redis://redis:6379/0
+  INDEX_DIR: /data/index
+  CORPUS_DIR: /app/corpus
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
+  LLM_PROVIDER: ${LLM_PROVIDER:-none}
+  LLM_BASE_URL: ${LLM_BASE_URL:-}
+  LLM_API_KEY: ${LLM_API_KEY:-}
+  LLM_MODEL: ${LLM_MODEL:-}
+  LLM_TIMEOUT_S: ${LLM_TIMEOUT_S:-20}
+  LLM_MAX_RETRIES: ${LLM_MAX_RETRIES:-2}
+  LLM_PRICE_IN_PER_1M: ${LLM_PRICE_IN_PER_1M:-0.15}
+  LLM_PRICE_OUT_PER_1M: ${LLM_PRICE_OUT_PER_1M:-0.60}
+  BREAKER_FAIL_THRESHOLD: ${BREAKER_FAIL_THRESHOLD:-3}
+  BREAKER_WINDOW_S: ${BREAKER_WINDOW_S:-60}
+  BREAKER_COOLDOWN_S: ${BREAKER_COOLDOWN_S:-20}
+  AGENT_MAX_STEPS: ${AGENT_MAX_STEPS:-12}
+  AGENT_MAX_TOOL_CALLS: ${AGENT_MAX_TOOL_CALLS:-14}
+  AGENT_RUN_TIMEOUT_S: ${AGENT_RUN_TIMEOUT_S:-45}
+  TOOL_TIMEOUT_S: ${TOOL_TIMEOUT_S:-5}
+  VERIFY_MAX_STRATEGIES: ${VERIFY_MAX_STRATEGIES:-2}
+  AGENTIC_RETRIEVAL: ${AGENTIC_RETRIEVAL:-true}
+  PROMPT_NORMALISE: ${PROMPT_NORMALISE:-normalise_v2}
+  EMBEDDINGS_ENABLED: ${EMBEDDINGS_ENABLED:-false}
+  EMBEDDING_MODEL: ${EMBEDDING_MODEL:-}
+  ANONYMIZED_TELEMETRY: "False"
+  CLIENT_RATE_LIMIT_PER_MINUTE: ${CLIENT_RATE_LIMIT_PER_MINUTE:-30}
+  RUN_CACHE_ENABLED: ${RUN_CACHE_ENABLED:-true}
+  WORKER_CONCURRENCY: ${WORKER_CONCURRENCY:-4}
+  QUALITY_SAMPLE_RATE: ${QUALITY_SAMPLE_RATE:-0.25}
+  TRUST_PROXY: ${TRUST_PROXY:-true}
+  FAULT_INJECTION: ${FAULT_INJECTION:-}
+
+services:
+  redis:                       # queue + state. Own container: stateful, independently restartable
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [redisdata:/data]
+    healthcheck: {test: ["CMD", "redis-cli", "ping"], interval: 5s, timeout: 3s, retries: 10}
+
+  indexer:                     # D2: one-shot, idempotent corpus pipeline. Different lifecycle from the services
+    build: {context: ., args: {WITH_EMBEDDINGS: "${WITH_EMBEDDINGS:-0}"}}
+    image: pv-service
+    command: ["python", "-m", "pv.corpus.build"]
+    environment: *app-env
+    volumes: [pvdata:/data]
+    restart: "no"
+
+  api:                         # stateless, latency-sensitive: scales on request rate
+    image: pv-service
+    depends_on:
+      redis: {condition: service_healthy}
+      indexer: {condition: service_completed_successfully}
+    environment: *app-env
+    volumes: [pvdata:/data:ro]
+    ports: ["8000:8000"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/health',timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    restart: unless-stopped
+
+  agent-worker:                # CPU/LLM-bound, slow: scales on queue depth. No fixed host port, so --scale works
+    image: pv-service
+    command: ["python", "-m", "pv.worker"]
+    depends_on:
+      redis: {condition: service_healthy}
+      indexer: {condition: service_completed_successfully}
+    environment: *app-env
+    volumes: [pvdata:/data:ro]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:9101/metrics',timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    stop_grace_period: 60s     # lets in-flight runs finish on SIGTERM
+    restart: unless-stopped
+
+  web:                         # static client + reverse proxy: separate release cadence from the API
+    image: nginx:1.27-alpine
+    volumes:
+      - ./frontend/index.html:/usr/share/nginx/html/index.html:ro
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on: [api]
+    ports: ["8080:80"]
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    volumes: ["./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro"]
+    ports: ["9090:9090"]
+    depends_on: [api]
+
+  cadvisor:                    # per-container CPU / memory for the dashboard
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    volumes: ["/:/rootfs:ro", "/var/run:/var/run:ro", "/sys:/sys:ro", "/var/lib/docker/:/var/lib/docker:ro"]
+    privileged: true
+    ports: ["8081:8080"]
+
+  jaeger:                      # OpenTelemetry traces (OTLP/HTTP on 4318)
+    image: jaegertracing/all-in-one:1.62.0
+    environment: {COLLECTOR_OTLP_ENABLED: "true"}
+    ports: ["16686:16686"]
+
+  grafana:
+    image: grafana/grafana:11.3.0
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+    volumes: ["./observability/grafana/provisioning:/etc/grafana/provisioning:ro", "./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro"]
+    ports: ["3000:3000"]
+    depends_on: [prometheus]
+
+volumes: {redisdata: {}, pvdata: {}}

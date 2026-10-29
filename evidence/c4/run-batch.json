@@ -1,0 +1,2134 @@
+{
+  "submitted_at_epoch": 1793273623.3832712,
+  "elapsed_seconds": 6.026,
+  "requested": 20,
+  "accepted": 20,
+  "completed": 20,
+  "pending_or_failed": [],
+  "runs": [
+    {
+      "case": "case41",
+      "http_status": 202,
+      "run_id": "303b966d0402403f",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "303b966d0402403f",
+        "route": "expedited_report",
+        "serious": true,
+        "seriousness_reasons": [
+          "hospitalization"
+        ],
+        "expectedness": "expected",
+        "expectedness_confidence": 0.95,
+        "route_basis": "Serious and expected (listed): IPC 2.7.1 requires 15 calendar days for all serious events; the NDCT PSUR cycle alone would not.",
+        "deadline": {
+          "days": 15,
+          "clock_starts": "2026-10-29",
+          "due_date": "2026-11-13"
+        },
+        "basis": [
+          {
+            "claim": "Seriousness criterion met: hospitalization",
+            "anchor": "sev_hosp",
+            "passage_id": "ipc_mah_v2_p0031_c03",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Hospitalization /prolongation of existing hospitalization: If Adverse Events 20 caused hospitalization or increased the h"
+          },
+          {
+            "claim": "Reaction term 'exfoliative dermatitis' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0013_c03",
+            "source": "tegretol_us_pi",
+            "page": 13,
+            "quote": "exfoliative dermatitis, erythema multiforme and nodosum, purpura, aggravation of disseminated lupus erythematosus, alopecia, diaphoresis, onychomadesis and hirsutism."
+          },
+          {
+            "claim": "Reaction term 'toxic epidermal necrolysis' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0004_c01",
+            "source": "tegretol_us_pi",
+            "page": 4,
+            "quote": "toxic epidermal necrolysis (TEN) and Stevens- Johnson syndrome (SJS), have been reported with Tegretol treatment."
+          },
+          {
+            "claim": "Reaction term 'Stevens-Johnson syndrome' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0004_c01",
+            "source": "tegretol_us_pi",
+            "page": 4,
+            "quote": "Stevens- Johnson syndrome (SJS), have been reported with Tegretol treatment."
+          },
+          {
+            "claim": "Serious adverse events must be reported within 15 calendar days (IPC 2.7.1)",
+            "anchor": "tl_serious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Serious Adverse Events must be reported by MAH within 15 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: serious unexpected reactions within 15 days, an exception to the PSUR cycle",
+            "anchor": "ndct_exception",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "all cases involving serious unexpected adverse reactions must be reported to the licencing authority within fifteen days of initial receipt of the information by the applicant."
+          },
+          {
+            "claim": "NDCT Fifth Schedule: periodic safety update reports within 30 days of the period end",
+            "anchor": "ndct_psur",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "Periodic safety update reports due for a period must be submitted within thirty calendar days of the last day of the reporting period."
+          }
+        ],
+        "conflicts": [
+          "Provisions differ for serious but EXPECTED reactions. IPC 2.7.1 requires 15-day reporting for ALL serious events; the NDCT Fifth Schedule singles out serious UNEXPECTED reactions for 15 days and otherwise uses the periodic (PSUR) cycle. Routed to the stricter, expedited stream because missing an expedited timeline is a regulatory finding; the qualified person must confirm."
+        ],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": true,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 8,
+          "citations_checked": 7,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": 7,
+          "outcome": "unknown",
+          "seriousness_flags": [
+            "hospitalization"
+          ],
+          "candidate_terms": [
+            "exfoliative dermatitis",
+            "toxic epidermal necrolysis",
+            "Stevens-Johnson syndrome"
+          ],
+          "direct_terms": [],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: expedited report (serious, expected). Serious and expected (listed): IPC 2.7.1 requires 15 calendar days for all serious events; the NDCT PSUR cycle alone would not. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 5,
+        "graph_steps": 5,
+        "tool_calls": 5,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 4.287,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.292,
+        "end_to_end_seconds": 4.642
+      }
+    },
+    {
+      "case": "headache",
+      "http_status": 202,
+      "run_id": "c4433fe4a83d4ec9",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "c4433fe4a83d4ec9",
+        "route": "periodic_safety_report",
+        "serious": false,
+        "seriousness_reasons": [],
+        "expectedness": "expected",
+        "expectedness_confidence": 0.9,
+        "route_basis": "Non-serious: IPC 2.7.2 requires reporting within 90 calendar days; also captured in the PSUR cycle (NDCT Fifth Schedule).",
+        "deadline": {
+          "days": 90,
+          "clock_starts": "2026-10-29",
+          "due_date": "2027-01-27"
+        },
+        "basis": [
+          {
+            "claim": "No seriousness criterion was reported (checked against the IPC list of criteria)",
+            "anchor": "sev_list",
+            "passage_id": "ipc_mah_v2_p0031_c02",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Seriousness of the reaction: If any adverse drug reaction is serious in nature, tick th"
+          },
+          {
+            "claim": "Reaction term 'headache' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0007_c04",
+            "source": "tegretol_us_pi",
+            "page": 7,
+            "quote": "headache, new or increased seizure frequency, difficulty concentrating, memory impairment, confusion, weakness, and unsteadiness, which can lead to falls."
+          },
+          {
+            "claim": "Non-serious adverse events must be reported within 90 calendar days (IPC 2.7.2)",
+            "anchor": "tl_nonserious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Non-Serious Adverse Events must be reported by MAH within 90 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: periodic safety update reports within 30 days of the period end",
+            "anchor": "ndct_psur",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "Periodic safety update reports due for a period must be submitted within thirty calendar days of the last day of the reporting period."
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 5,
+          "citations_checked": 4,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-23",
+          "onset_latency_days": 4,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [
+            "headache"
+          ],
+          "direct_terms": [
+            "headache"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: periodic safety report (non-serious, expected). Non-serious: IPC 2.7.2 requires reporting within 90 calendar days; also captured in the PSUR cycle (NDCT Fifth Schedule). Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 5,
+        "graph_steps": 5,
+        "tool_calls": 5,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 1.565,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.023,
+        "end_to_end_seconds": 1.759
+      }
+    },
+    {
+      "case": "unlisted",
+      "http_status": 202,
+      "run_id": "6d8975dedf444d02",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "6d8975dedf444d02",
+        "route": "expedited_report",
+        "serious": true,
+        "seriousness_reasons": [
+          "hospitalization"
+        ],
+        "expectedness": "unexpected",
+        "expectedness_confidence": 0.8,
+        "route_basis": "Serious and unexpected: 15 days under both IPC 2.7.1 and the NDCT Fifth Schedule.",
+        "deadline": {
+          "days": 15,
+          "clock_starts": "2026-10-29",
+          "due_date": "2026-11-13"
+        },
+        "basis": [
+          {
+            "claim": "Seriousness criterion met: hospitalization",
+            "anchor": "sev_hosp",
+            "passage_id": "ipc_mah_v2_p0031_c03",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Hospitalization /prolongation of existing hospitalization: If Adverse Events 20 caused hospitalization or increased the h"
+          },
+          {
+            "claim": "Reaction not listed in the package insert",
+            "anchor": "label_absence",
+            "kind": "absence",
+            "terms_searched": [
+              "tendon rupture"
+            ],
+            "source": "tegretol_us_pi"
+          },
+          {
+            "claim": "Serious adverse events must be reported within 15 calendar days (IPC 2.7.1)",
+            "anchor": "tl_serious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Serious Adverse Events must be reported by MAH within 15 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: serious unexpected reactions within 15 days, an exception to the PSUR cycle",
+            "anchor": "ndct_exception",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "all cases involving serious unexpected adverse reactions must be reported to the licencing authority within fifteen days of initial receipt of the information by the applicant."
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 5,
+          "citations_checked": 4,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-24",
+          "onset_latency_days": 5,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [
+            "hospitalization"
+          ],
+          "candidate_terms": [
+            "tendon rupture"
+          ],
+          "direct_terms": [
+            "tendon rupture"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: expedited report (serious, unexpected). Serious and unexpected: 15 days under both IPC 2.7.1 and the NDCT Fifth Schedule. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 8,
+        "graph_steps": 5,
+        "tool_calls": 8,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 1.74,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.028,
+        "end_to_end_seconds": 1.888
+      }
+    },
+    {
+      "case": "noevent",
+      "http_status": 202,
+      "run_id": "18ebab85960a424a",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "18ebab85960a424a",
+        "route": "non_reportable",
+        "serious": false,
+        "seriousness_reasons": [],
+        "expectedness": "not_applicable",
+        "expectedness_confidence": 1.0,
+        "route_basis": "No adverse event is described, so the minimum criteria for a valid ICSR (IPC 2.5) are not met.",
+        "deadline": null,
+        "basis": [
+          {
+            "claim": "A valid ICSR requires an identifiable adverse event; none is described",
+            "anchor": "valid_icsr",
+            "passage_id": "ipc_mah_v2_p0029_c02",
+            "source": "ipc_mah_v2",
+            "page": 29,
+            "quote": "valid ICSR would be one, which meets the following minimum criteria for reporting: (i) An identi\ufb01able patient (one or more iden"
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 2,
+          "citations_checked": 1,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [],
+          "direct_terms": [],
+          "no_event_described": true,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: non reportable (non-serious, not_applicable). No adverse event is described, so the minimum criteria for a valid ICSR (IPC 2.5) are not met. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 1,
+        "graph_steps": 5,
+        "tool_calls": 1,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 0.689,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.061,
+        "end_to_end_seconds": 0.863
+      }
+    },
+    {
+      "case": "unknown_drug",
+      "http_status": 202,
+      "run_id": "a4619af15b984f8d",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "a4619af15b984f8d",
+        "route": "human_escalation",
+        "serious": null,
+        "seriousness_reasons": [],
+        "expectedness": null,
+        "expectedness_confidence": null,
+        "route_basis": "Escalated: drug_outside_corpus",
+        "deadline": null,
+        "basis": [],
+        "conflicts": [],
+        "escalation": {
+          "required": true,
+          "reasons": [
+            "drug_outside_corpus"
+          ],
+          "path": "Route to the qualified person for pharmacovigilance (QPPV) with the trace attached."
+        },
+        "requires_qppv_confirmation": true,
+        "verification": null,
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Paracetamol 500mg",
+          "drug_generic": null,
+          "label_source": null,
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [
+            "headache"
+          ],
+          "direct_terms": [
+            "headache"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Escalated to a qualified person: drug_outside_corpus.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 0,
+        "graph_steps": 2,
+        "tool_calls": 0,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 3.524,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.227,
+        "end_to_end_seconds": 3.813
+      }
+    },
+    {
+      "case": "case41",
+      "http_status": 202,
+      "run_id": "3795760180eb4b78",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "3795760180eb4b78",
+        "route": "expedited_report",
+        "serious": true,
+        "seriousness_reasons": [
+          "hospitalization"
+        ],
+        "expectedness": "expected",
+        "expectedness_confidence": 0.95,
+        "route_basis": "Serious and expected (listed): IPC 2.7.1 requires 15 calendar days for all serious events; the NDCT PSUR cycle alone would not.",
+        "deadline": {
+          "days": 15,
+          "clock_starts": "2026-10-29",
+          "due_date": "2026-11-13"
+        },
+        "basis": [
+          {
+            "claim": "Seriousness criterion met: hospitalization",
+            "anchor": "sev_hosp",
+            "passage_id": "ipc_mah_v2_p0031_c03",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Hospitalization /prolongation of existing hospitalization: If Adverse Events 20 caused hospitalization or increased the h"
+          },
+          {
+            "claim": "Reaction term 'exfoliative dermatitis' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0013_c03",
+            "source": "tegretol_us_pi",
+            "page": 13,
+            "quote": "exfoliative dermatitis, erythema multiforme and nodosum, purpura, aggravation of disseminated lupus erythematosus, alopecia, diaphoresis, onychomadesis and hirsutism."
+          },
+          {
+            "claim": "Reaction term 'toxic epidermal necrolysis' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0004_c01",
+            "source": "tegretol_us_pi",
+            "page": 4,
+            "quote": "toxic epidermal necrolysis (TEN) and Stevens- Johnson syndrome (SJS), have been reported with Tegretol treatment."
+          },
+          {
+            "claim": "Reaction term 'Stevens-Johnson syndrome' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0004_c01",
+            "source": "tegretol_us_pi",
+            "page": 4,
+            "quote": "Stevens- Johnson syndrome (SJS), have been reported with Tegretol treatment."
+          },
+          {
+            "claim": "Serious adverse events must be reported within 15 calendar days (IPC 2.7.1)",
+            "anchor": "tl_serious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Serious Adverse Events must be reported by MAH within 15 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: serious unexpected reactions within 15 days, an exception to the PSUR cycle",
+            "anchor": "ndct_exception",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "all cases involving serious unexpected adverse reactions must be reported to the licencing authority within fifteen days of initial receipt of the information by the applicant."
+          },
+          {
+            "claim": "NDCT Fifth Schedule: periodic safety update reports within 30 days of the period end",
+            "anchor": "ndct_psur",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "Periodic safety update reports due for a period must be submitted within thirty calendar days of the last day of the reporting period."
+          }
+        ],
+        "conflicts": [
+          "Provisions differ for serious but EXPECTED reactions. IPC 2.7.1 requires 15-day reporting for ALL serious events; the NDCT Fifth Schedule singles out serious UNEXPECTED reactions for 15 days and otherwise uses the periodic (PSUR) cycle. Routed to the stricter, expedited stream because missing an expedited timeline is a regulatory finding; the qualified person must confirm."
+        ],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": true,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 8,
+          "citations_checked": 7,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": 7,
+          "outcome": "unknown",
+          "seriousness_flags": [
+            "hospitalization"
+          ],
+          "candidate_terms": [
+            "exfoliative dermatitis",
+            "toxic epidermal necrolysis",
+            "Stevens-Johnson syndrome"
+          ],
+          "direct_terms": [],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: expedited report (serious, expected). Serious and expected (listed): IPC 2.7.1 requires 15 calendar days for all serious events; the NDCT PSUR cycle alone would not. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 5,
+        "graph_steps": 5,
+        "tool_calls": 5,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 4.253,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.212,
+        "end_to_end_seconds": 4.531
+      }
+    },
+    {
+      "case": "headache",
+      "http_status": 202,
+      "run_id": "3b7c684010954bab",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "3b7c684010954bab",
+        "route": "periodic_safety_report",
+        "serious": false,
+        "seriousness_reasons": [],
+        "expectedness": "expected",
+        "expectedness_confidence": 0.9,
+        "route_basis": "Non-serious: IPC 2.7.2 requires reporting within 90 calendar days; also captured in the PSUR cycle (NDCT Fifth Schedule).",
+        "deadline": {
+          "days": 90,
+          "clock_starts": "2026-10-29",
+          "due_date": "2027-01-27"
+        },
+        "basis": [
+          {
+            "claim": "No seriousness criterion was reported (checked against the IPC list of criteria)",
+            "anchor": "sev_list",
+            "passage_id": "ipc_mah_v2_p0031_c02",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Seriousness of the reaction: If any adverse drug reaction is serious in nature, tick th"
+          },
+          {
+            "claim": "Reaction term 'headache' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0007_c04",
+            "source": "tegretol_us_pi",
+            "page": 7,
+            "quote": "headache, new or increased seizure frequency, difficulty concentrating, memory impairment, confusion, weakness, and unsteadiness, which can lead to falls."
+          },
+          {
+            "claim": "Non-serious adverse events must be reported within 90 calendar days (IPC 2.7.2)",
+            "anchor": "tl_nonserious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Non-Serious Adverse Events must be reported by MAH within 90 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: periodic safety update reports within 30 days of the period end",
+            "anchor": "ndct_psur",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "Periodic safety update reports due for a period must be submitted within thirty calendar days of the last day of the reporting period."
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 5,
+          "citations_checked": 4,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-23",
+          "onset_latency_days": 4,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [
+            "headache"
+          ],
+          "direct_terms": [
+            "headache"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: periodic safety report (non-serious, expected). Non-serious: IPC 2.7.2 requires reporting within 90 calendar days; also captured in the PSUR cycle (NDCT Fifth Schedule). Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 5,
+        "graph_steps": 5,
+        "tool_calls": 5,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 4.22,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.217,
+        "end_to_end_seconds": 4.512
+      }
+    },
+    {
+      "case": "unlisted",
+      "http_status": 202,
+      "run_id": "d2a68de9d1ad4902",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "d2a68de9d1ad4902",
+        "route": "expedited_report",
+        "serious": true,
+        "seriousness_reasons": [
+          "hospitalization"
+        ],
+        "expectedness": "unexpected",
+        "expectedness_confidence": 0.8,
+        "route_basis": "Serious and unexpected: 15 days under both IPC 2.7.1 and the NDCT Fifth Schedule.",
+        "deadline": {
+          "days": 15,
+          "clock_starts": "2026-10-29",
+          "due_date": "2026-11-13"
+        },
+        "basis": [
+          {
+            "claim": "Seriousness criterion met: hospitalization",
+            "anchor": "sev_hosp",
+            "passage_id": "ipc_mah_v2_p0031_c03",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Hospitalization /prolongation of existing hospitalization: If Adverse Events 20 caused hospitalization or increased the h"
+          },
+          {
+            "claim": "Reaction not listed in the package insert",
+            "anchor": "label_absence",
+            "kind": "absence",
+            "terms_searched": [
+              "tendon rupture"
+            ],
+            "source": "tegretol_us_pi"
+          },
+          {
+            "claim": "Serious adverse events must be reported within 15 calendar days (IPC 2.7.1)",
+            "anchor": "tl_serious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Serious Adverse Events must be reported by MAH within 15 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: serious unexpected reactions within 15 days, an exception to the PSUR cycle",
+            "anchor": "ndct_exception",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "all cases involving serious unexpected adverse reactions must be reported to the licencing authority within fifteen days of initial receipt of the information by the applicant."
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 5,
+          "citations_checked": 4,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-24",
+          "onset_latency_days": 5,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [
+            "hospitalization"
+          ],
+          "candidate_terms": [
+            "tendon rupture"
+          ],
+          "direct_terms": [
+            "tendon rupture"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: expedited report (serious, unexpected). Serious and unexpected: 15 days under both IPC 2.7.1 and the NDCT Fifth Schedule. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 8,
+        "graph_steps": 5,
+        "tool_calls": 8,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 4.276,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.208,
+        "end_to_end_seconds": 4.511
+      }
+    },
+    {
+      "case": "noevent",
+      "http_status": 202,
+      "run_id": "765b86a1f9bf4a88",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "765b86a1f9bf4a88",
+        "route": "non_reportable",
+        "serious": false,
+        "seriousness_reasons": [],
+        "expectedness": "not_applicable",
+        "expectedness_confidence": 1.0,
+        "route_basis": "No adverse event is described, so the minimum criteria for a valid ICSR (IPC 2.5) are not met.",
+        "deadline": null,
+        "basis": [
+          {
+            "claim": "A valid ICSR requires an identifiable adverse event; none is described",
+            "anchor": "valid_icsr",
+            "passage_id": "ipc_mah_v2_p0029_c02",
+            "source": "ipc_mah_v2",
+            "page": 29,
+            "quote": "valid ICSR would be one, which meets the following minimum criteria for reporting: (i) An identi\ufb01able patient (one or more iden"
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 2,
+          "citations_checked": 1,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [],
+          "direct_terms": [],
+          "no_event_described": true,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: non reportable (non-serious, not_applicable). No adverse event is described, so the minimum criteria for a valid ICSR (IPC 2.5) are not met. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 1,
+        "graph_steps": 5,
+        "tool_calls": 1,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 3.714,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.119,
+        "end_to_end_seconds": 3.859
+      }
+    },
+    {
+      "case": "unknown_drug",
+      "http_status": 202,
+      "run_id": "07c411453e084ebd",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "07c411453e084ebd",
+        "route": "human_escalation",
+        "serious": null,
+        "seriousness_reasons": [],
+        "expectedness": null,
+        "expectedness_confidence": null,
+        "route_basis": "Escalated: drug_outside_corpus",
+        "deadline": null,
+        "basis": [],
+        "conflicts": [],
+        "escalation": {
+          "required": true,
+          "reasons": [
+            "drug_outside_corpus"
+          ],
+          "path": "Route to the qualified person for pharmacovigilance (QPPV) with the trace attached."
+        },
+        "requires_qppv_confirmation": true,
+        "verification": null,
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Paracetamol 500mg",
+          "drug_generic": null,
+          "label_source": null,
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [
+            "headache"
+          ],
+          "direct_terms": [
+            "headache"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Escalated to a qualified person: drug_outside_corpus.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 0,
+        "graph_steps": 2,
+        "tool_calls": 0,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 0.382,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.028,
+        "end_to_end_seconds": 0.504
+      }
+    },
+    {
+      "case": "case41",
+      "http_status": 202,
+      "run_id": "c25c70bd053040c7",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "c25c70bd053040c7",
+        "route": "expedited_report",
+        "serious": true,
+        "seriousness_reasons": [
+          "hospitalization"
+        ],
+        "expectedness": "expected",
+        "expectedness_confidence": 0.95,
+        "route_basis": "Serious and expected (listed): IPC 2.7.1 requires 15 calendar days for all serious events; the NDCT PSUR cycle alone would not.",
+        "deadline": {
+          "days": 15,
+          "clock_starts": "2026-10-29",
+          "due_date": "2026-11-13"
+        },
+        "basis": [
+          {
+            "claim": "Seriousness criterion met: hospitalization",
+            "anchor": "sev_hosp",
+            "passage_id": "ipc_mah_v2_p0031_c03",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Hospitalization /prolongation of existing hospitalization: If Adverse Events 20 caused hospitalization or increased the h"
+          },
+          {
+            "claim": "Reaction term 'exfoliative dermatitis' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0013_c03",
+            "source": "tegretol_us_pi",
+            "page": 13,
+            "quote": "exfoliative dermatitis, erythema multiforme and nodosum, purpura, aggravation of disseminated lupus erythematosus, alopecia, diaphoresis, onychomadesis and hirsutism."
+          },
+          {
+            "claim": "Reaction term 'toxic epidermal necrolysis' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0004_c01",
+            "source": "tegretol_us_pi",
+            "page": 4,
+            "quote": "toxic epidermal necrolysis (TEN) and Stevens- Johnson syndrome (SJS), have been reported with Tegretol treatment."
+          },
+          {
+            "claim": "Reaction term 'Stevens-Johnson syndrome' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0004_c01",
+            "source": "tegretol_us_pi",
+            "page": 4,
+            "quote": "Stevens- Johnson syndrome (SJS), have been reported with Tegretol treatment."
+          },
+          {
+            "claim": "Serious adverse events must be reported within 15 calendar days (IPC 2.7.1)",
+            "anchor": "tl_serious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Serious Adverse Events must be reported by MAH within 15 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: serious unexpected reactions within 15 days, an exception to the PSUR cycle",
+            "anchor": "ndct_exception",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "all cases involving serious unexpected adverse reactions must be reported to the licencing authority within fifteen days of initial receipt of the information by the applicant."
+          },
+          {
+            "claim": "NDCT Fifth Schedule: periodic safety update reports within 30 days of the period end",
+            "anchor": "ndct_psur",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "Periodic safety update reports due for a period must be submitted within thirty calendar days of the last day of the reporting period."
+          }
+        ],
+        "conflicts": [
+          "Provisions differ for serious but EXPECTED reactions. IPC 2.7.1 requires 15-day reporting for ALL serious events; the NDCT Fifth Schedule singles out serious UNEXPECTED reactions for 15 days and otherwise uses the periodic (PSUR) cycle. Routed to the stricter, expedited stream because missing an expedited timeline is a regulatory finding; the qualified person must confirm."
+        ],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": true,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 8,
+          "citations_checked": 7,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": 7,
+          "outcome": "unknown",
+          "seriousness_flags": [
+            "hospitalization"
+          ],
+          "candidate_terms": [
+            "exfoliative dermatitis",
+            "toxic epidermal necrolysis",
+            "Stevens-Johnson syndrome"
+          ],
+          "direct_terms": [],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: expedited report (serious, expected). Serious and expected (listed): IPC 2.7.1 requires 15 calendar days for all serious events; the NDCT PSUR cycle alone would not. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 5,
+        "graph_steps": 5,
+        "tool_calls": 5,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 4.292,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.057,
+        "end_to_end_seconds": 4.417
+      }
+    },
+    {
+      "case": "headache",
+      "http_status": 202,
+      "run_id": "da41c40f78b848e4",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "da41c40f78b848e4",
+        "route": "periodic_safety_report",
+        "serious": false,
+        "seriousness_reasons": [],
+        "expectedness": "expected",
+        "expectedness_confidence": 0.9,
+        "route_basis": "Non-serious: IPC 2.7.2 requires reporting within 90 calendar days; also captured in the PSUR cycle (NDCT Fifth Schedule).",
+        "deadline": {
+          "days": 90,
+          "clock_starts": "2026-10-29",
+          "due_date": "2027-01-27"
+        },
+        "basis": [
+          {
+            "claim": "No seriousness criterion was reported (checked against the IPC list of criteria)",
+            "anchor": "sev_list",
+            "passage_id": "ipc_mah_v2_p0031_c02",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Seriousness of the reaction: If any adverse drug reaction is serious in nature, tick th"
+          },
+          {
+            "claim": "Reaction term 'headache' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0007_c04",
+            "source": "tegretol_us_pi",
+            "page": 7,
+            "quote": "headache, new or increased seizure frequency, difficulty concentrating, memory impairment, confusion, weakness, and unsteadiness, which can lead to falls."
+          },
+          {
+            "claim": "Non-serious adverse events must be reported within 90 calendar days (IPC 2.7.2)",
+            "anchor": "tl_nonserious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Non-Serious Adverse Events must be reported by MAH within 90 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: periodic safety update reports within 30 days of the period end",
+            "anchor": "ndct_psur",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "Periodic safety update reports due for a period must be submitted within thirty calendar days of the last day of the reporting period."
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 5,
+          "citations_checked": 4,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-23",
+          "onset_latency_days": 4,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [
+            "headache"
+          ],
+          "direct_terms": [
+            "headache"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: periodic safety report (non-serious, expected). Non-serious: IPC 2.7.2 requires reporting within 90 calendar days; also captured in the PSUR cycle (NDCT Fifth Schedule). Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 5,
+        "graph_steps": 5,
+        "tool_calls": 5,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 4.297,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.05,
+        "end_to_end_seconds": 4.403
+      }
+    },
+    {
+      "case": "unlisted",
+      "http_status": 202,
+      "run_id": "bb1f426211c84ea0",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "bb1f426211c84ea0",
+        "route": "expedited_report",
+        "serious": true,
+        "seriousness_reasons": [
+          "hospitalization"
+        ],
+        "expectedness": "unexpected",
+        "expectedness_confidence": 0.8,
+        "route_basis": "Serious and unexpected: 15 days under both IPC 2.7.1 and the NDCT Fifth Schedule.",
+        "deadline": {
+          "days": 15,
+          "clock_starts": "2026-10-29",
+          "due_date": "2026-11-13"
+        },
+        "basis": [
+          {
+            "claim": "Seriousness criterion met: hospitalization",
+            "anchor": "sev_hosp",
+            "passage_id": "ipc_mah_v2_p0031_c03",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Hospitalization /prolongation of existing hospitalization: If Adverse Events 20 caused hospitalization or increased the h"
+          },
+          {
+            "claim": "Reaction not listed in the package insert",
+            "anchor": "label_absence",
+            "kind": "absence",
+            "terms_searched": [
+              "tendon rupture"
+            ],
+            "source": "tegretol_us_pi"
+          },
+          {
+            "claim": "Serious adverse events must be reported within 15 calendar days (IPC 2.7.1)",
+            "anchor": "tl_serious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Serious Adverse Events must be reported by MAH within 15 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: serious unexpected reactions within 15 days, an exception to the PSUR cycle",
+            "anchor": "ndct_exception",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "all cases involving serious unexpected adverse reactions must be reported to the licencing authority within fifteen days of initial receipt of the information by the applicant."
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 5,
+          "citations_checked": 4,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-24",
+          "onset_latency_days": 5,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [
+            "hospitalization"
+          ],
+          "candidate_terms": [
+            "tendon rupture"
+          ],
+          "direct_terms": [
+            "tendon rupture"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: expedited report (serious, unexpected). Serious and unexpected: 15 days under both IPC 2.7.1 and the NDCT Fifth Schedule. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 8,
+        "graph_steps": 5,
+        "tool_calls": 8,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 1.066,
+        "cache_hit": false,
+        "queue_wait_seconds": 0.655,
+        "end_to_end_seconds": 1.729
+      }
+    },
+    {
+      "case": "noevent",
+      "http_status": 202,
+      "run_id": "9300d78f6bdf496e",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "9300d78f6bdf496e",
+        "route": "non_reportable",
+        "serious": false,
+        "seriousness_reasons": [],
+        "expectedness": "not_applicable",
+        "expectedness_confidence": 1.0,
+        "route_basis": "No adverse event is described, so the minimum criteria for a valid ICSR (IPC 2.5) are not met.",
+        "deadline": null,
+        "basis": [
+          {
+            "claim": "A valid ICSR requires an identifiable adverse event; none is described",
+            "anchor": "valid_icsr",
+            "passage_id": "ipc_mah_v2_p0029_c02",
+            "source": "ipc_mah_v2",
+            "page": 29,
+            "quote": "valid ICSR would be one, which meets the following minimum criteria for reporting: (i) An identi\ufb01able patient (one or more iden"
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 2,
+          "citations_checked": 1,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [],
+          "direct_terms": [],
+          "no_event_described": true,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: non reportable (non-serious, not_applicable). No adverse event is described, so the minimum criteria for a valid ICSR (IPC 2.5) are not met. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 1,
+        "graph_steps": 5,
+        "tool_calls": 1,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 0.024,
+        "cache_hit": false,
+        "queue_wait_seconds": 1.525,
+        "end_to_end_seconds": 1.627
+      }
+    },
+    {
+      "case": "unknown_drug",
+      "http_status": 202,
+      "run_id": "e615f851593f460a",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "e615f851593f460a",
+        "route": "human_escalation",
+        "serious": null,
+        "seriousness_reasons": [],
+        "expectedness": null,
+        "expectedness_confidence": null,
+        "route_basis": "Escalated: drug_outside_corpus",
+        "deadline": null,
+        "basis": [],
+        "conflicts": [],
+        "escalation": {
+          "required": true,
+          "reasons": [
+            "drug_outside_corpus"
+          ],
+          "path": "Route to the qualified person for pharmacovigilance (QPPV) with the trace attached."
+        },
+        "requires_qppv_confirmation": true,
+        "verification": null,
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Paracetamol 500mg",
+          "drug_generic": null,
+          "label_source": null,
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [
+            "headache"
+          ],
+          "direct_terms": [
+            "headache"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Escalated to a qualified person: drug_outside_corpus.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 0,
+        "graph_steps": 2,
+        "tool_calls": 0,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 0.014,
+        "cache_hit": false,
+        "queue_wait_seconds": 1.708,
+        "end_to_end_seconds": 1.729
+      }
+    },
+    {
+      "case": "case41",
+      "http_status": 202,
+      "run_id": "d56100e1121c40e6",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "d56100e1121c40e6",
+        "route": "expedited_report",
+        "serious": true,
+        "seriousness_reasons": [
+          "hospitalization"
+        ],
+        "expectedness": "expected",
+        "expectedness_confidence": 0.95,
+        "route_basis": "Serious and expected (listed): IPC 2.7.1 requires 15 calendar days for all serious events; the NDCT PSUR cycle alone would not.",
+        "deadline": {
+          "days": 15,
+          "clock_starts": "2026-10-29",
+          "due_date": "2026-11-13"
+        },
+        "basis": [
+          {
+            "claim": "Seriousness criterion met: hospitalization",
+            "anchor": "sev_hosp",
+            "passage_id": "ipc_mah_v2_p0031_c03",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Hospitalization /prolongation of existing hospitalization: If Adverse Events 20 caused hospitalization or increased the h"
+          },
+          {
+            "claim": "Reaction term 'exfoliative dermatitis' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0013_c03",
+            "source": "tegretol_us_pi",
+            "page": 13,
+            "quote": "exfoliative dermatitis, erythema multiforme and nodosum, purpura, aggravation of disseminated lupus erythematosus, alopecia, diaphoresis, onychomadesis and hirsutism."
+          },
+          {
+            "claim": "Reaction term 'toxic epidermal necrolysis' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0004_c01",
+            "source": "tegretol_us_pi",
+            "page": 4,
+            "quote": "toxic epidermal necrolysis (TEN) and Stevens- Johnson syndrome (SJS), have been reported with Tegretol treatment."
+          },
+          {
+            "claim": "Reaction term 'Stevens-Johnson syndrome' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0004_c01",
+            "source": "tegretol_us_pi",
+            "page": 4,
+            "quote": "Stevens- Johnson syndrome (SJS), have been reported with Tegretol treatment."
+          },
+          {
+            "claim": "Serious adverse events must be reported within 15 calendar days (IPC 2.7.1)",
+            "anchor": "tl_serious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Serious Adverse Events must be reported by MAH within 15 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: serious unexpected reactions within 15 days, an exception to the PSUR cycle",
+            "anchor": "ndct_exception",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "all cases involving serious unexpected adverse reactions must be reported to the licencing authority within fifteen days of initial receipt of the information by the applicant."
+          },
+          {
+            "claim": "NDCT Fifth Schedule: periodic safety update reports within 30 days of the period end",
+            "anchor": "ndct_psur",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "Periodic safety update reports due for a period must be submitted within thirty calendar days of the last day of the reporting period."
+          }
+        ],
+        "conflicts": [
+          "Provisions differ for serious but EXPECTED reactions. IPC 2.7.1 requires 15-day reporting for ALL serious events; the NDCT Fifth Schedule singles out serious UNEXPECTED reactions for 15 days and otherwise uses the periodic (PSUR) cycle. Routed to the stricter, expedited stream because missing an expedited timeline is a regulatory finding; the qualified person must confirm."
+        ],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": true,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 8,
+          "citations_checked": 7,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": 7,
+          "outcome": "unknown",
+          "seriousness_flags": [
+            "hospitalization"
+          ],
+          "candidate_terms": [
+            "exfoliative dermatitis",
+            "toxic epidermal necrolysis",
+            "Stevens-Johnson syndrome"
+          ],
+          "direct_terms": [],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: expedited report (serious, expected). Serious and expected (listed): IPC 2.7.1 requires 15 calendar days for all serious events; the NDCT PSUR cycle alone would not. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 5,
+        "graph_steps": 5,
+        "tool_calls": 5,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 0.308,
+        "cache_hit": false,
+        "queue_wait_seconds": 1.69,
+        "end_to_end_seconds": 2.009
+      }
+    },
+    {
+      "case": "headache",
+      "http_status": 202,
+      "run_id": "9c4002ec6b12411e",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "9c4002ec6b12411e",
+        "route": "periodic_safety_report",
+        "serious": false,
+        "seriousness_reasons": [],
+        "expectedness": "expected",
+        "expectedness_confidence": 0.9,
+        "route_basis": "Non-serious: IPC 2.7.2 requires reporting within 90 calendar days; also captured in the PSUR cycle (NDCT Fifth Schedule).",
+        "deadline": {
+          "days": 90,
+          "clock_starts": "2026-10-29",
+          "due_date": "2027-01-27"
+        },
+        "basis": [
+          {
+            "claim": "No seriousness criterion was reported (checked against the IPC list of criteria)",
+            "anchor": "sev_list",
+            "passage_id": "ipc_mah_v2_p0031_c02",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Seriousness of the reaction: If any adverse drug reaction is serious in nature, tick th"
+          },
+          {
+            "claim": "Reaction term 'headache' is listed in the package insert",
+            "anchor": "label_listing",
+            "passage_id": "tegretol_us_pi_p0007_c04",
+            "source": "tegretol_us_pi",
+            "page": 7,
+            "quote": "headache, new or increased seizure frequency, difficulty concentrating, memory impairment, confusion, weakness, and unsteadiness, which can lead to falls."
+          },
+          {
+            "claim": "Non-serious adverse events must be reported within 90 calendar days (IPC 2.7.2)",
+            "anchor": "tl_nonserious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Non-Serious Adverse Events must be reported by MAH within 90 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: periodic safety update reports within 30 days of the period end",
+            "anchor": "ndct_psur",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "Periodic safety update reports due for a period must be submitted within thirty calendar days of the last day of the reporting period."
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 5,
+          "citations_checked": 4,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-23",
+          "onset_latency_days": 4,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [
+            "headache"
+          ],
+          "direct_terms": [
+            "headache"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: periodic safety report (non-serious, expected). Non-serious: IPC 2.7.2 requires reporting within 90 calendar days; also captured in the PSUR cycle (NDCT Fifth Schedule). Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 5,
+        "graph_steps": 5,
+        "tool_calls": 5,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 0.259,
+        "cache_hit": false,
+        "queue_wait_seconds": 1.724,
+        "end_to_end_seconds": 2.001
+      }
+    },
+    {
+      "case": "unlisted",
+      "http_status": 202,
+      "run_id": "85b1f4532bcb46bd",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "85b1f4532bcb46bd",
+        "route": "expedited_report",
+        "serious": true,
+        "seriousness_reasons": [
+          "hospitalization"
+        ],
+        "expectedness": "unexpected",
+        "expectedness_confidence": 0.8,
+        "route_basis": "Serious and unexpected: 15 days under both IPC 2.7.1 and the NDCT Fifth Schedule.",
+        "deadline": {
+          "days": 15,
+          "clock_starts": "2026-10-29",
+          "due_date": "2026-11-13"
+        },
+        "basis": [
+          {
+            "claim": "Seriousness criterion met: hospitalization",
+            "anchor": "sev_hosp",
+            "passage_id": "ipc_mah_v2_p0031_c03",
+            "source": "ipc_mah_v2",
+            "page": 31,
+            "quote": "Hospitalization /prolongation of existing hospitalization: If Adverse Events 20 caused hospitalization or increased the h"
+          },
+          {
+            "claim": "Reaction not listed in the package insert",
+            "anchor": "label_absence",
+            "kind": "absence",
+            "terms_searched": [
+              "tendon rupture"
+            ],
+            "source": "tegretol_us_pi"
+          },
+          {
+            "claim": "Serious adverse events must be reported within 15 calendar days (IPC 2.7.1)",
+            "anchor": "tl_serious",
+            "passage_id": "ipc_mah_v2_p0033_c01",
+            "source": "ipc_mah_v2",
+            "page": 33,
+            "quote": "All Serious Adverse Events must be reported by MAH within 15 calendar days of receipt of information from any source, to (i) National"
+          },
+          {
+            "claim": "NDCT Fifth Schedule: serious unexpected reactions within 15 days, an exception to the PSUR cycle",
+            "anchor": "ndct_exception",
+            "passage_id": "cdsco_rules_p0229_c01",
+            "source": "cdsco_rules",
+            "page": 229,
+            "quote": "all cases involving serious unexpected adverse reactions must be reported to the licencing authority within fifteen days of initial receipt of the information by the applicant."
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 5,
+          "citations_checked": 4,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-24",
+          "onset_latency_days": 5,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [
+            "hospitalization"
+          ],
+          "candidate_terms": [
+            "tendon rupture"
+          ],
+          "direct_terms": [
+            "tendon rupture"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: expedited report (serious, unexpected). Serious and unexpected: 15 days under both IPC 2.7.1 and the NDCT Fifth Schedule. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 8,
+        "graph_steps": 5,
+        "tool_calls": 8,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 0.398,
+        "cache_hit": false,
+        "queue_wait_seconds": 1.707,
+        "end_to_end_seconds": 2.128
+      }
+    },
+    {
+      "case": "noevent",
+      "http_status": 202,
+      "run_id": "b4ce4d39ccbc4143",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "b4ce4d39ccbc4143",
+        "route": "non_reportable",
+        "serious": false,
+        "seriousness_reasons": [],
+        "expectedness": "not_applicable",
+        "expectedness_confidence": 1.0,
+        "route_basis": "No adverse event is described, so the minimum criteria for a valid ICSR (IPC 2.5) are not met.",
+        "deadline": null,
+        "basis": [
+          {
+            "claim": "A valid ICSR requires an identifiable adverse event; none is described",
+            "anchor": "valid_icsr",
+            "passage_id": "ipc_mah_v2_p0029_c02",
+            "source": "ipc_mah_v2",
+            "page": 29,
+            "quote": "valid ICSR would be one, which meets the following minimum criteria for reporting: (i) An identi\ufb01able patient (one or more iden"
+          }
+        ],
+        "conflicts": [],
+        "escalation": {
+          "required": false,
+          "reasons": [],
+          "path": null
+        },
+        "requires_qppv_confirmation": false,
+        "verification": {
+          "status": "passed",
+          "failures": [],
+          "checks": 2,
+          "citations_checked": 1,
+          "retryable": false,
+          "strategy": 0
+        },
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Tegretol (carbamazepine)",
+          "drug_generic": "carbamazepine",
+          "label_source": "tegretol_us_pi",
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [],
+          "direct_terms": [],
+          "no_event_described": true,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Recommended route: non reportable (non-serious, not_applicable). No adverse event is described, so the minimum criteria for a valid ICSR (IPC 2.5) are not met. Cited provisions are listed below.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 1,
+        "graph_steps": 5,
+        "tool_calls": 1,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 0.089,
+        "cache_hit": false,
+        "queue_wait_seconds": 1.695,
+        "end_to_end_seconds": 1.947
+      }
+    },
+    {
+      "case": "unknown_drug",
+      "http_status": 202,
+      "run_id": "0ea338caa2dd4455",
+      "error": null,
+      "status": "done",
+      "result": {
+        "run_id": "0ea338caa2dd4455",
+        "route": "human_escalation",
+        "serious": null,
+        "seriousness_reasons": [],
+        "expectedness": null,
+        "expectedness_confidence": null,
+        "route_basis": "Escalated: drug_outside_corpus",
+        "deadline": null,
+        "basis": [],
+        "conflicts": [],
+        "escalation": {
+          "required": true,
+          "reasons": [
+            "drug_outside_corpus"
+          ],
+          "path": "Route to the qualified person for pharmacovigilance (QPPV) with the trace attached."
+        },
+        "requires_qppv_confirmation": true,
+        "verification": null,
+        "degraded": [],
+        "entities": {
+          "suspect_drug": "Paracetamol 500mg",
+          "drug_generic": null,
+          "label_source": null,
+          "age": 35,
+          "sex": "female",
+          "start_date": "2026-10-19",
+          "reaction_date": "2026-10-26",
+          "onset_latency_days": 7,
+          "narrative_latency_days": null,
+          "outcome": "unknown",
+          "seriousness_flags": [],
+          "candidate_terms": [
+            "headache"
+          ],
+          "direct_terms": [
+            "headache"
+          ],
+          "no_event_described": false,
+          "received_date": "2026-10-29"
+        },
+        "disclaimer": "Decision support only. This system never submits a regulatory report. A qualified person for pharmacovigilance (QPPV) decides.",
+        "summary": "Escalated to a qualified person: drug_outside_corpus.",
+        "prompt_versions": {},
+        "cost": {
+          "total_usd": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "per_step": {}
+        },
+        "steps": 0,
+        "graph_steps": 2,
+        "tool_calls": 0,
+        "strategy_attempts": 1,
+        "engine": "langgraph",
+        "mode": "rules_only",
+        "corpus_version": "17027899456b",
+        "retrieval_backend": "tfidf",
+        "agentic": true,
+        "run_seconds": 0.027,
+        "cache_hit": false,
+        "queue_wait_seconds": 2.014,
+        "end_to_end_seconds": 2.09
+      }
+    }
+  ]
+}

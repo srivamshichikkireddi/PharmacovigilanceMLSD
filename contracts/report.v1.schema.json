@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AdverseEventReport",
+  "x-contract-version": "1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "patient_age": {
+      "description": "Age in years (0 for neonates).",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 120
+    },
+    "patient_sex": {
+      "description": "Patient sex.",
+      "type": "string",
+      "enum": [
+        "female",
+        "male",
+        "other",
+        "unknown"
+      ]
+    },
+    "suspect_drug": {
+      "description": "Suspect drug, brand or generic name.",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 150
+    },
+    "reaction_description": {
+      "description": "Reporter's narrative of the reaction, in their own words.",
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 4000
+    },
+    "start_date": {
+      "description": "Date the suspect drug was started (ISO 8601).",
+      "type": "string",
+      "format": "date"
+    },
+    "reaction_date": {
+      "description": "Date the reaction began (ISO 8601). Not before start_date.",
+      "type": "string",
+      "format": "date"
+    },
+    "received_date": {
+      "description": "Date the MAH first received the report. Starts the reporting clock. Defaults to today.",
+      "type": "string",
+      "format": "date"
+    },
+    "hospitalization": {
+      "description": "Caused or prolonged hospitalisation.",
+      "type": "boolean",
+      "default": false
+    },
+    "death": {
+      "description": "Resulted in death.",
+      "type": "boolean",
+      "default": false
+    },
+    "life_threatening": {
+      "description": "Patient at substantial risk of dying at the time of the event.",
+      "type": "boolean",
+      "default": false
+    },
+    "disability": {
+      "description": "Resulted in substantial disability.",
+      "type": "boolean",
+      "default": false
+    },
+    "congenital_anomaly": {
+      "description": "Congenital anomaly / birth defect.",
+      "type": "boolean",
+      "default": false
+    },
+    "outcome": {
+      "description": "Outcome at time of report. Default 'unknown'.",
+      "type": "string",
+      "enum": [
+        "recovered",
+        "not_recovered",
+        "recovering",
+        "fatal",
+        "recovered_with_sequelae",
+        "unknown"
+      ]
+    },
+    "reporter_type": {
+      "description": "Who reported.",
+      "type": "string",
+      "enum": [
+        "doctor",
+        "pharmacist",
+        "patient",
+        "other"
+      ]
+    }
+  },
+  "required": [
+    "patient_age",
+    "patient_sex",
+    "suspect_drug",
+    "reaction_description",
+    "start_date",
+    "reaction_date",
+    "reporter_type"
+  ],
+  "x-cross-field-rules": [
+    "reaction_date >= start_date",
+    "received_date >= reaction_date",
+    "no date may be in the future",
+    "death=true => outcome in {fatal, unknown}",
+    "outcome=fatal => death=true"
+  ],
+  "x-free-text-guardrails": [
+    "prompt-injection patterns rejected",
+    "abusive language rejected"
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "error_rate": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1793273867.462,
+            "0"
+          ]
+        }
+      ]
+    }
+  },
+  "api_5xx": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1793273867.472,
+            "0"
+          ]
+        }
+      ]
+    }
+  },
+  "container_cpu": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "id": "/"
+          },
+          "value": [
+            1793273867.477,
+            "0.4694952217159192"
+          ]
+        },
+        {
+          "metric": {
+            "id": "/docker"
+          },
+          "value": [
+            1793273867.477,
+            "0.27307248680148344"
+          ]
+        },
+        {
+          "metric": {
+            "id": "/docker/buildkit"
+          },
+          "value": [
+            1793273867.477,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "id": "/restricted"
+          },
+          "value": [
+            1793273867.477,
+            "0.05156451084583118"
+          ]
+        }
+      ]
+    }
+  },
+  "container_memory": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "id": "/"
+          },
+          "value": [
+            1793273867.5,
+            "1996550144"
+          ]
+        },
+        {
+          "metric": {
+            "id": "/docker"
+          },
+          "value": [
+            1793273867.5,
+            "1096843264"
+          ]
+        },
+        {
+          "metric": {
+            "id": "/docker/buildkit"
+          },
+          "value": [
+            1793273867.5,
+            "137117696"
+          ]
+        },
+        {
+          "metric": {
+            "id": "/docker/buildx"
+          },
+          "value": [
+            1793273867.5,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "id": "/kubepods"
+          },
+          "value": [
+            1793273867.5,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "id": "/podruntime"
+          },
+          "value": [
+            1793273867.5,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "id": "/procd-paused"
+          },
+          "value": [
+            1793273867.5,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "id": "/restricted"
+          },
+          "value": [
+            1793273867.5,
+            "251662336"
+          ]
+        }
+      ]
+    }
+  }
+}

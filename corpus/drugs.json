@@ -1,0 +1,4 @@
+{
+  "_comment": "Drugs covered by the corpus. 'label_source' is the package-insert document name (file stem in corpus/source_pdfs). A suspect drug not listed here is OUTSIDE the corpus and escalates (F7).",
+  "carbamazepine": {"aliases": ["carbamazepine", "tegretol", "tegretol-xr", "tegretol xr", "epitol"], "label_source": "tegretol_us_pi"}
+}

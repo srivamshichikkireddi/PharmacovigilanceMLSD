@@ -1,0 +1,7 @@
+Python executable: C:\Users\chikk\AppData\Local\Temp\pv-service-c0-venv\Scripts\python.exe
+Python version: Python 3.11.9
+Poppler executable: C:\Users\chikk\AppData\Local\Microsoft\WinGet\Packages\oschwartz10612.Poppler_Microsoft.Winget.Source_8wekyb3d8bbwe\poppler-25.07.0\Library\bin\pdftotext.exe
+Poppler version:
+pdftotext version 25.07.0
+Copyright 2005-2025 The Poppler Developers - http://poppler.freedesktop.org
+Copyright 1996-2011, 2022 Glyph & Cog, LLC

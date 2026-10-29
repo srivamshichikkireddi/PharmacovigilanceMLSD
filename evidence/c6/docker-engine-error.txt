@@ -1,0 +1,10 @@
+After the dependency-alignment build reached "#19 unpacking to image":
+
+Command:
+  docker image inspect pv-service --format '{{.Id}} {{.Size}}'
+
+Docker Desktop response:
+  request returned 500 Internal Server Error for API route and version
+  http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.56/images/pv-service/json
+
+At the time, PowerShell reported about 1.6 GB free on C:. The exact Engine failure cause is unconfirmed. No images or volumes were pruned.

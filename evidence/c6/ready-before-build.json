@@ -1,0 +1,29 @@
+{
+  "ready": true,
+  "workers": 2,
+  "queue_depth": 0,
+  "index": {
+    "built_utc": "2026-10-29T13:10:20.553530+00:00",
+    "chunks": 1216,
+    "corpus_version": "17027899456b",
+    "documents": [
+      {
+        "name": "cdsco_rules",
+        "sha256": "b25fdd5476a2",
+        "pages": 264
+      },
+      {
+        "name": "ipc_mah_v2",
+        "sha256": "9142de7460f7",
+        "pages": 86
+      },
+      {
+        "name": "tegretol_us_pi",
+        "sha256": "7e788668f892",
+        "pages": 25
+      }
+    ],
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "throughput_chunks_per_s": 8.0
+  }
+}

@@ -1,0 +1,25 @@
+skip   cdsco_rules (unchanged)
+skip   ipc_mah_v2 (unchanged)
+skip   tegretol_us_pi (unchanged)
+docker : Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+At line:14 char:859
++ ... EXITCODE }; docker run @common --mount ('type=bind,source='+ (Join-Pa ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Failed to send ...ut 3 were given:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+Failed to send telemetry event CollectionGetEvent: capture() takes 1 positional argument but 3 were given
+embedded 0 new/changed chunks, removed 0, model=sentence-transformers/all-MiniLM-L6-v2
+{
+  "built_utc": "2026-10-29T13:28:30.033432+00:00",
+  "chunker_version": "2",
+  "chunks": 1216,
+  "reparsed_documents": 0,
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "embedded_chunks": 1216,
+  "errors": [],
+  "build_seconds": 15.99,
+  "throughput_chunks_per_s": 76.0,
+  "corpus_version": "17027899456b"
+}

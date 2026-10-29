@@ -1,0 +1,27 @@
+docker :  Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-indexer-run-67d39275220d Creating
+At line:2 char:301
++ ... ion $clone; docker compose run --rm indexer *> (Join-Path $repo 'evid ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ( Container pv-s...5220d Creating :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-indexer-run-67d39275220d Created
+skip   cdsco_rules (unchanged)
+skip   ipc_mah_v2 (unchanged)
+skip   tegretol_us_pi (unchanged)
+Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+Failed to send telemetry event CollectionGetEvent: capture() takes 1 positional argument but 3 were given
+embedded 1216 new/changed chunks, removed 0, model=sentence-transformers/all-MiniLM-L6-v2
+{
+  "built_utc": "2026-10-29T13:10:20.553530+00:00",
+  "chunker_version": "2",
+  "chunks": 1216,
+  "reparsed_documents": 0,
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "embedded_chunks": 1216,
+  "errors": [],
+  "build_seconds": 152.23,
+  "throughput_chunks_per_s": 8.0,
+  "corpus_version": "17027899456b"
+}

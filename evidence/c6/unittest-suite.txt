@@ -1,0 +1,22 @@
+python : ........................ssss.................run_failed
+At line:2 char:68
++ ... tion $repo; python -m unittest discover -s tests -t . *> (Join-Path $ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (.......................run_failed:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Traceback (most recent call last):
+  File "C:\Srivamshi\MLSDJackFruit\pv-service\pv\worker.py", line 39, in process
+    res, trace = run_case(run_id, job["report"], index, llm, settings)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Srivamshi\MLSDJackFruit\pv-service\tests\test_platform.py", line 79, in <lambda>
+    orig = P.run_case; P.run_case = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("kaboom"))
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Srivamshi\MLSDJackFruit\pv-service\tests\test_platform.py", line 79, in <genexpr>
+    orig = P.run_case; P.run_case = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("kaboom"))
+RuntimeError: kaboom
+............
+----------------------------------------------------------------------
+Ran 57 tests in 1.501s
+
+OK (skipped=4)

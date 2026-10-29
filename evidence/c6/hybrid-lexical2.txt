@@ -1,0 +1,63 @@
+docker : Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+At line:2 char:654
++ ... ion $clone; docker compose exec -T api python -m pv.eval.run --label  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Failed to send ...ut 3 were given:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+
+id     expected                got                     ok  tools  description
+PV-01  expedited_report        expedited_report        Y   5      SECTION 4.1 CASE: skin peeling a week after star
+PV-02  periodic_safety_report  periodic_safety_report  Y   5      Mild headache, non-serious
+PV-03  periodic_safety_report  periodic_safety_report  Y   5      Dizziness and unsteadiness, non-serious
+PV-04  periodic_safety_report  periodic_safety_report  Y   5      Vomiting, non-serious
+PV-05  expedited_report        expedited_report        Y   5      Low blood counts and death
+PV-06  expedited_report        expedited_report        Y   5      Blistering with mouth sores, life-threatening, I
+PV-07  expedited_report        expedited_report        Y   5      Double vision causing disability
+PV-08  expedited_report        expedited_report        Y   5      Birth defect after in-utero exposure
+PV-09  expedited_report        expedited_report        Y   5      Jaundice with hospital stay
+PV-10  periodic_safety_report  periodic_safety_report  Y   5      Itchy rash, non-serious
+PV-11  expedited_report        expedited_report        Y   8      Serious event NOT in label (tendon rupture)
+PV-12  periodic_safety_report  periodic_safety_report  Y   8      Non-serious event NOT in label (glaucoma)
+PV-13  human_escalation        human_escalation        Y   8      Unmatchable serious reaction
+PV-14  human_escalation        human_escalation        Y   8      Vague non-serious reaction
+PV-15  human_escalation        human_escalation        Y   0      Drug outside the corpus
+PV-16  human_escalation        human_escalation        Y   0      Narrative says admitted, flag says not
+PV-17  human_escalation        human_escalation        Y   0      Timing in narrative contradicts dates
+PV-18  non_reportable          non_reportable          Y   1      No adverse event described
+PV-19  human_escalation        human_escalation        Y   5      Medically important term with no seriousness fla
+PV-20  human_escalation        human_escalation        Y   8      Only a generic term matches the label
+PV-21  periodic_safety_report  periodic_safety_report  Y   5      Low sodium in an older patient
+PV-22  expedited_report        expedited_report        Y   5      Irregular heartbeat with admission
+PV-23  quarantined             quarantined             Y   -
+PV-24  quarantined             quarantined             Y   -
+PV-25  quarantined             quarantined             Y   -
+PV-26  quarantined             quarantined             Y   -
+
+{
+ "label": "c6_hybrid_lexical2",
+ "agentic": true,
+ "provider": "none",
+ "prompt": "normalise_v2",
+ "corpus_version": "17027899456b",
+ "backend": "hybrid(tfidf+vectors)",
+ "scenarios": 26,
+ "valid_cases": 22,
+ "boundary_cases": 4,
+ "route_accuracy": 1.0,
+ "answered_rate": 0.6818,
+ "seriousness_accuracy": 1.0,
+ "expectedness_accuracy": 1.0,
+ "escalation_reason_accuracy": 1.0,
+ "boundary_rejection_rate": 1.0,
+ "groundedness": 1.0,
+ "faithfulness": 1.0,
+ "context_relevance": 0.3788,
+ "context_recall": 0.9667,
+ "hallucination_rate": 0.0,
+ "unsafe_answer_rate": 0.0,
+ "mean_tool_calls": 4.8182,
+ "mean_cost_usd": 0.0
+}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Pharmacovigilance triage</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+ body{font:15px/1.45 system-ui,sans-serif;max-width:920px;margin:1.5rem auto;padding:0 1rem;color:#1b1f24}
+ textarea{width:100%;height:230px;font:13px ui-monospace,monospace} button{padding:.5rem 1rem;margin-right:.5rem;cursor:pointer}
+ .card{border:1px solid #c9d1d9;border-radius:8px;padding:1rem;margin:1rem 0} .route{font-size:1.4rem;font-weight:700}
+ .expedited_report{color:#b42318}.periodic_safety_report{color:#1a5fb4}.non_reportable{color:#555}.human_escalation{color:#9a6700}
+ .cite{border-left:3px solid #8b949e;padding:.3rem .7rem;margin:.5rem 0;background:#f6f8fa} .src{font-size:.8rem;color:#57606a}
+ .warn{background:#fff8c5;padding:.5rem .7rem;border-radius:6px} .err{background:#ffebe9;padding:.5rem .7rem;border-radius:6px} small{color:#57606a}
+</style></head><body>
+<h2>Adverse event intake &amp; triage</h2>
+<small>Decision support only. This system never submits a regulatory report; a qualified person for pharmacovigilance decides. Use synthetic data only.</small>
+<p><textarea id="payload" aria-label="Report JSON"></textarea></p>
+<button id="go">Submit report</button><button id="demo">Reset to section 4.1 case</button>
+<div id="out"></div>
+<script>
+const $=id=>document.getElementById(id), API="/api";
+const day=n=>{const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().slice(0,10)};
+const demo=()=>({patient_age:35,patient_sex:"female",suspect_drug:"Tegretol (carbamazepine)",
+  reaction_description:"The patient's skin started peeling badly one week after starting the drug, and she was admitted to hospital.",
+  start_date:day(10),reaction_date:day(3),hospitalization:true,reporter_type:"doctor"});
+$("payload").value=JSON.stringify(demo(),null,2);
+$("demo").onclick=()=>{$("payload").value=JSON.stringify(demo(),null,2)};
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
+function show(node){const o=$("out");o.replaceChildren(node)}
+function note(msg,cls){const d=el("div","card "+(cls||""),msg);show(d)}
+$("go").onclick=async()=>{
+  let body; try{body=JSON.parse($("payload").value)}catch(e){return note("Not valid JSON: "+e.message,"err")}
+  note("Submitting…");
+  const r=await fetch(API+"/reports",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  const j=await r.json();
+  if(r.status===422){const c=el("div","card err");c.append(el("b",0,"Rejected at the boundary: no agent run was started. Quarantine id "+j.quarantine_id));
+    j.errors.forEach(e=>c.append(el("div",0,e.loc+" ["+e.code+"]: "+e.message)));return show(c)}
+  if(r.status===429)return note("Rate limited. Retry later.","err");
+  if(r.status!==202)return note("Unexpected response "+r.status,"err");
+  poll(j.run_id)};
+async function poll(id){
+  const t0=Date.now();
+  while(Date.now()-t0<120000){
+    const j=await (await fetch(API+"/runs/"+id)).json();
+    if(j.status==="done")return render(j);
+    if(j.status==="failed")return note("Run failed: "+(j.error||"unknown")+". No answer was produced.","err");
+    note("Run "+id+": "+j.status+" … "+Math.round((Date.now()-t0)/1000)+"s");
+    await new Promise(r=>setTimeout(r,1000))}
+  note("Still running after 2 minutes. Poll GET /runs/"+id+" later.","warn")}
+function render(j){
+  const r=j.result, c=el("div","card");
+  c.append(el("div","route "+r.route,r.route.replaceAll("_"," ").toUpperCase()));
+  c.append(el("p",0,r.summary));
+  if(r.deadline)c.append(el("p",0,"Clock: "+r.deadline.days+" calendar days from "+r.deadline.clock_starts+" → due "+r.deadline.due_date));
+  c.append(el("p",0,"Seriousness: "+(r.serious===null?"n/a":r.serious?"serious ("+r.seriousness_reasons.join(", ")+")":"non-serious")+
+     "   |   Expectedness: "+(r.expectedness||"n/a")+(r.expectedness_confidence?" ("+r.expectedness_confidence+")":"")));
+  (r.conflicts||[]).forEach(t=>c.append(el("p","warn","⚠ Provision conflict: "+t)));
+  if(r.escalation.required){const e=el("div","warn");e.append(el("b",0,"Escalation → "+r.escalation.path));
+    r.escalation.reasons.forEach(x=>e.append(el("div",0,"• "+x)));
+    if(r.partial_findings)e.append(el("div",0,"Partial findings (unconfirmed): "+JSON.stringify(r.partial_findings)));c.append(e)}
+  if(r.degraded.length)c.append(el("p","warn","Degraded run: "+r.degraded.join("; ")));
+  if(r.basis.length)c.append(el("h4",0,"Citations (each quote was re-checked against retrieved text)"));
+  r.basis.forEach(b=>{const d=el("div","cite");d.append(el("div",0,b.claim));
+    d.append(el("div","src",b.kind==="absence"?"Searched the package insert for: "+b.terms_searched.join(", ")+" (not found)":b.source+" · page "+b.page+" · "+b.passage_id));
+    if(b.quote)d.append(el("em",0,"“"+b.quote+"”"));c.append(d)});
+  c.append(el("small",0,"Verification: "+r.verification.status+" · steps "+r.steps+" · tool calls "+r.tool_calls+" · prompts "+JSON.stringify(r.prompt_versions)+
+     " · cost $"+r.cost.total_usd+" · end-to-end "+r.end_to_end_seconds+"s · "+r.mode+(r.cache_hit?" · cache hit":"")));
+  c.append(el("p"));const a=el("a",0,"Open full trace");a.href=API+"/runs/"+j.run_id+"/trace";a.target="_blank";c.append(a);
+  const fb=el("p");fb.append("Was this useful? ");
+  const send=async ok=>{let reason="";if(!ok){reason=prompt("What was wrong?")||"";if(reason.trim().length<3)return}
+    const x=await fetch(API+"/runs/"+j.run_id+"/feedback",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({satisfactory:ok,reason})});
+    fb.replaceChildren(el("span",0,x.ok?"Thanks, feedback recorded.":"Could not record feedback."))};
+  const y=el("button",0,"👍 Yes"),n=el("button",0,"👎 No");y.onclick=()=>send(true);n.onclick=()=>send(false);fb.append(y,n);c.append(fb);
+  show(c)}
+</script></body></html>

@@ -1,0 +1,440 @@
+{
+  "up": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "__name__": "up",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.214,
+            "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "up",
+            "instance": "api:8000",
+            "job": "api"
+          },
+          "value": [
+            1793273760.214,
+            "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "up",
+            "instance": "172.18.0.6:9101",
+            "job": "agent-worker"
+          },
+          "value": [
+            1793273760.214,
+            "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "up",
+            "instance": "172.18.0.11:9101",
+            "job": "agent-worker"
+          },
+          "value": [
+            1793273760.214,
+            "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "up",
+            "instance": "172.18.0.10:9101",
+            "job": "agent-worker"
+          },
+          "value": [
+            1793273760.214,
+            "1"
+          ]
+        }
+      ]
+    }
+  },
+  "container_cpu_all": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "__name__": "container_cpu_usage_seconds_total",
+            "cpu": "total",
+            "id": "/",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.225,
+            "6075.144"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "container_cpu_usage_seconds_total",
+            "cpu": "total",
+            "id": "/docker",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.225,
+            "2995.698463"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "container_cpu_usage_seconds_total",
+            "cpu": "total",
+            "id": "/docker/buildkit",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.225,
+            "173.950473"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "container_cpu_usage_seconds_total",
+            "cpu": "total",
+            "id": "/restricted",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.225,
+            "1220.943372"
+          ]
+        }
+      ]
+    }
+  },
+  "container_cpu_name_filter": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": []
+    }
+  },
+  "container_memory_all": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "__name__": "container_memory_working_set_bytes",
+            "id": "/",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.261,
+            "2015182848"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "container_memory_working_set_bytes",
+            "id": "/docker",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.261,
+            "1103974400"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "container_memory_working_set_bytes",
+            "id": "/docker/buildkit",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.261,
+            "138596352"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "container_memory_working_set_bytes",
+            "id": "/docker/buildx",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.261,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "container_memory_working_set_bytes",
+            "id": "/kubepods",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.261,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "container_memory_working_set_bytes",
+            "id": "/podruntime",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.261,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "container_memory_working_set_bytes",
+            "id": "/procd-paused",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.261,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "container_memory_working_set_bytes",
+            "id": "/restricted",
+            "instance": "cadvisor:8080",
+            "job": "cadvisor"
+          },
+          "value": [
+            1793273760.261,
+            "253898752"
+          ]
+        }
+      ]
+    }
+  },
+  "container_memory_name_filter": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": []
+    }
+  },
+  "failed_runs": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": []
+    }
+  },
+  "run_counter": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "__name__": "pv_runs_total",
+            "instance": "172.18.0.6:9101",
+            "job": "agent-worker",
+            "route": "periodic_safety_report",
+            "status": "done"
+          },
+          "value": [
+            1793273760.293,
+            "64"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "pv_runs_total",
+            "instance": "172.18.0.6:9101",
+            "job": "agent-worker",
+            "route": "human_escalation",
+            "status": "done"
+          },
+          "value": [
+            1793273760.293,
+            "4"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "pv_runs_total",
+            "instance": "172.18.0.6:9101",
+            "job": "agent-worker",
+            "route": "non_reportable",
+            "status": "done"
+          },
+          "value": [
+            1793273760.293,
+            "3"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "pv_runs_total",
+            "instance": "172.18.0.11:9101",
+            "job": "agent-worker",
+            "route": "human_escalation",
+            "status": "done"
+          },
+          "value": [
+            1793273760.293,
+            "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "pv_runs_total",
+            "instance": "172.18.0.11:9101",
+            "job": "agent-worker",
+            "route": "expedited_report",
+            "status": "done"
+          },
+          "value": [
+            1793273760.293,
+            "2"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "pv_runs_total",
+            "instance": "172.18.0.11:9101",
+            "job": "agent-worker",
+            "route": "periodic_safety_report",
+            "status": "done"
+          },
+          "value": [
+            1793273760.293,
+            "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "pv_runs_total",
+            "instance": "172.18.0.6:9101",
+            "job": "agent-worker",
+            "route": "expedited_report",
+            "status": "done"
+          },
+          "value": [
+            1793273760.293,
+            "4"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "pv_runs_total",
+            "instance": "172.18.0.10:9101",
+            "job": "agent-worker",
+            "route": "non_reportable",
+            "status": "done"
+          },
+          "value": [
+            1793273760.293,
+            "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "pv_runs_total",
+            "instance": "172.18.0.10:9101",
+            "job": "agent-worker",
+            "route": "expedited_report",
+            "status": "done"
+          },
+          "value": [
+            1793273760.293,
+            "2"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "pv_runs_total",
+            "instance": "172.18.0.10:9101",
+            "job": "agent-worker",
+            "route": "periodic_safety_report",
+            "status": "done"
+          },
+          "value": [
+            1793273760.293,
+            "1"
+          ]
+        }
+      ]
+    }
+  },
+  "error_rate": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": []
+    }
+  },
+  "run_latency": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1793273760.324,
+            "NaN"
+          ]
+        }
+      ]
+    }
+  },
+  "queue": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1793273760.34,
+            "0"
+          ]
+        }
+      ]
+    }
+  },
+  "index_chunks": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1793273760.355,
+            "1216"
+          ]
+        }
+      ]
+    }
+  }
+}

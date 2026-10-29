@@ -1,0 +1,27 @@
+# Overlay for D6/A7: the LLM is replaced by a stub with a realistic delay; everything else is the real system.
+services:
+  llm-stub:
+    image: python:3.11-slim
+    command: ["python", "/stub/stub_llm.py"]
+    environment: {STUB_DELAY_S: "${STUB_DELAY_S:-1.2}"}
+    volumes: ["./loadtest/stub_llm.py:/stub/stub_llm.py:ro"]
+    healthcheck: {test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:9000/',timeout=3)"], interval: 5s, retries: 10}
+    ports: ["9000:9000"]
+  api:
+    environment: &lt
+      LLM_PROVIDER: openai_compat
+      LLM_BASE_URL: http://llm-stub:9000/v1
+      LLM_API_KEY: stub
+      CLIENT_RATE_LIMIT_PER_MINUTE: "100000"
+      RUN_CACHE_ENABLED: "false"
+      QUALITY_SAMPLE_RATE: "0"
+    depends_on: {llm-stub: {condition: service_healthy}}
+  agent-worker:
+    environment: *lt
+    depends_on: {llm-stub: {condition: service_healthy}}
+  locust:
+    image: locustio/locust:2.32.4
+    volumes: ["./loadtest:/mnt/locust", "./eval/scenarios.json:/mnt/locust/scenarios.json:ro"]
+    ports: ["8089:8089"]
+    depends_on: [api]
+    profiles: ["tools"]

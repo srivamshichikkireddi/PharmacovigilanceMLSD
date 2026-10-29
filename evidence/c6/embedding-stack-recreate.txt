@@ -1,0 +1,22 @@
+docker :  Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-1 Recreate
+At line:2 char:301
++ ... ion $clone; docker compose up -d --no-deps --force-recreate --scale a ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ( Container pv-s...ker-1 Recreate :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-api-1 Recreate
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-3 Recreate
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-2 Recreate
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-api-1 Recreated
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-2 Recreated
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-1 Recreated
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-3 Recreated
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-api-1 Starting
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-1 Starting
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-api-1 Started
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-1 Started
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-3 Starting
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-3 Started
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-2 Starting
+ Container pv-service-c1-clean-d567dc381b744d99b67c32c70cd96034-agent-worker-2 Started

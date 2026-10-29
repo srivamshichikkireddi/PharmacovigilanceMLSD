@@ -1,0 +1,4 @@
+Write a 2-3 sentence justification for a pharmacovigilance reviewer.
+Use ONLY the facts below. Do not claim any report was submitted. Do not give a final regulatory decision.
+Facts: {{facts}}
+Reply with JSON only: {"summary": "..."}
