@@ -1,8 +1,15 @@
 global: {scrape_interval: 5s, evaluation_interval: 5s}
 scrape_configs:
+  - job_name: prometheus
+    static_configs: [{targets: ["prometheus:9090"]}]
   - job_name: api
     static_configs: [{targets: ["api:8000"]}]
   - job_name: agent-worker          # one target per scaled replica via Docker DNS
     dns_sd_configs: [{names: ["agent-worker"], type: A, port: 9101, refresh_interval: 5s}]
   - job_name: cadvisor
     static_configs: [{targets: ["cadvisor:8080"]}]
+  - job_name: jaeger
+    static_configs: [{targets: ["jaeger:14269"]}]
+  - job_name: grafana
+    static_configs: [{targets: ["grafana:3000"]}]
+  # nginx serves the static client but does not expose a native /metrics endpoint.

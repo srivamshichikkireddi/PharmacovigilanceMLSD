@@ -1,0 +1,199 @@
+{
+  "title": "Phase 8 stub-only load measurements",
+  "conditions": {
+    "declared_slo_file": "docs/SLO.md",
+    "p95_target_seconds": 30,
+    "minimum_completed_runs_per_second": 1.0,
+    "required_workers": 3,
+    "required_failed_runs": 0,
+    "declared_run_cache": "off",
+    "locust_ramp_users": [
+      2,
+      4,
+      8,
+      12,
+      16,
+      24,
+      32
+    ],
+    "seconds_per_stage": 60,
+    "load_duration_seconds": 420,
+    "stub_delay_seconds": 1.2,
+    "stub_jitter": "plus/minus 15 percent",
+    "worker_concurrency_slots": 4,
+    "loadtest_provider": "openai-compatible interface to local llm-stub container only",
+    "primary_compose_provider": "none"
+  },
+  "locust": {
+    "phase8_off_w1": {
+      "e2e_count": 108,
+      "failure_count": 6,
+      "throughput_runs_per_s": 0.1811,
+      "p50_s": 81.0,
+      "p95_s": 180.0,
+      "submitted_count": 109,
+      "first_rolling_p95_exceedance_users": 4,
+      "first_rolling_p95_s": 33.0,
+      "first_rolling_rps": 0.1
+    },
+    "phase8_off_w3": {
+      "e2e_count": 218,
+      "failure_count": 0,
+      "throughput_runs_per_s": 0.4497,
+      "p50_s": 29.0,
+      "p95_s": 67.0,
+      "submitted_count": 219,
+      "first_rolling_p95_exceedance_users": 12,
+      "first_rolling_p95_s": 32.0,
+      "first_rolling_rps": 0.5
+    },
+    "phase8_on_w1": {
+      "e2e_count": 4968,
+      "failure_count": 0,
+      "throughput_runs_per_s": 11.8098,
+      "p50_s": 0.008,
+      "p95_s": 0.029,
+      "submitted_count": 4968,
+      "first_rolling_p95_exceedance_users": 8,
+      "first_rolling_p95_s": 33.0,
+      "first_rolling_rps": 0.0
+    },
+    "phase8_on_w3": {
+      "e2e_count": 5462,
+      "failure_count": 0,
+      "throughput_runs_per_s": 12.9952,
+      "p50_s": 0.008,
+      "p95_s": 0.044,
+      "submitted_count": 5462,
+      "first_rolling_p95_exceedance_users": null,
+      "first_rolling_p95_s": null,
+      "first_rolling_rps": null
+    }
+  },
+  "api_ops_summary": {
+    "phase8_off_w1": {
+      "runs": 109,
+      "p50_s": 80.373,
+      "p95_s": 180.875,
+      "e2e_samples": 109,
+      "cost_total_usd": 0.06223,
+      "cost_per_100_runs_usd": 0.057092,
+      "cost_by_step_usd": {
+        "normalise_terms": 0.0092268,
+        "evidence_action": 0.0480714,
+        "draft_summary": 0.004932
+      },
+      "largest_cost_driver": "evidence_action",
+      "stub_calls": 486,
+      "cache_hits": 0,
+      "cache_misses": 0,
+      "note": "6 Locust pollers reached the 180s client deadline while status was still running; all 109 runs later appeared in the API aggregate and queue drained."
+    },
+    "phase8_off_w3": {
+      "runs": 219,
+      "p50_s": 28.655,
+      "p95_s": 67.154,
+      "e2e_samples": 219,
+      "cost_total_usd": 0.132639,
+      "cost_per_100_runs_usd": 0.060566,
+      "cost_by_step_usd": {
+        "normalise_terms": 0.01995765,
+        "evidence_action": 0.1033917,
+        "draft_summary": 0.00928935
+      },
+      "largest_cost_driver": "evidence_action",
+      "stub_calls": 1035,
+      "cache_hits": 0,
+      "cache_misses": 0,
+      "note": "API aggregate has one more completed run than Locust E2E rows; Locust recorded no failed E2E requests."
+    },
+    "phase8_on_w1": {
+      "runs": 4968,
+      "p50_s": 0.002,
+      "p95_s": 0.005,
+      "e2e_samples": 4968,
+      "cost_total_usd": 0.018987,
+      "cost_per_100_runs_usd": 0.000382,
+      "cost_by_step_usd": {
+        "normalise_terms": 0.00290385,
+        "evidence_action": 0.01493625,
+        "draft_summary": 0.00114705
+      },
+      "largest_cost_driver": "evidence_action",
+      "stub_calls": 148,
+      "cache_hits": 4937,
+      "cache_misses": 31,
+      "note": "Warm-cache result; cache hit ratio 99.38%."
+    },
+    "phase8_on_w3": {
+      "runs": 5463,
+      "p50_s": 0.002,
+      "p95_s": 0.005,
+      "e2e_samples": 5000,
+      "cost_total_usd": 0.020115,
+      "cost_per_100_runs_usd": 0.000368,
+      "cost_by_step_usd": {
+        "normalise_terms": 0.0030336,
+        "evidence_action": 0.01558995,
+        "draft_summary": 0.0014913
+      },
+      "largest_cost_driver": "evidence_action",
+      "stub_calls": 157,
+      "cache_hits": 5432,
+      "cache_misses": 31,
+      "note": "Warm-cache result; API stores only the most recent 5,000 latency samples; API run counter is one above Locust submission/E2E rows."
+    }
+  },
+  "declared_slo_met_cache_off_three_workers": false,
+  "cache_effect": {
+    "one_worker": {
+      "p95_off_s": 180.0,
+      "p95_on_s": 0.029,
+      "cost_per_100_off_usd": 0.057092,
+      "cost_per_100_on_usd": 0.000382,
+      "cache_hit_ratio_on": 0.99376
+    },
+    "three_workers": {
+      "p95_off_s": 67.0,
+      "p95_on_s": 0.044,
+      "cost_per_100_off_usd": 0.060566,
+      "cost_per_100_on_usd": 0.000368,
+      "cache_hit_ratio_on": 0.994325
+    }
+  },
+  "capacity_evidence": {
+    "one_worker_cache_off": {
+      "inflight_runs": 4,
+      "configured_slots": 4,
+      "queue_depth": 7,
+      "docker_stats_worker_cpu_percent": 58.7
+    },
+    "three_workers_cache_off": {
+      "inflight_runs_per_worker": [
+        4,
+        4,
+        4
+      ],
+      "configured_slots_per_worker": 4,
+      "queue_depth_worker_metric": 12,
+      "api_ready_queue_depth": 11,
+      "docker_stats_worker_cpu_percent": [
+        2.74,
+        0.02,
+        3.64
+      ]
+    },
+    "interpretation": "All worker slots were occupied and queue depth grew, while sampled worker CPU was not saturated; worker concurrency/LLM wait is the supported bottleneck."
+  },
+  "raw_locust_csv_prefixes": [
+    "phase8_off_w1",
+    "phase8_off_w3",
+    "phase8_on_w1",
+    "phase8_on_w3"
+  ],
+  "caveats": [
+    "Cache-on values are warm-cache supplemental measurements and do not satisfy the declared cache-off SLO condition.",
+    "One initial cache-off one-worker pilot was incomplete at test shutdown and is retained with a pilot_incomplete filename; final results use the 240s stop timeout.",
+    "The 1-worker Locust run recorded 6 requests still running at its 180s client poll deadline; the API later recorded all 109 runs completed."
+  ]
+}

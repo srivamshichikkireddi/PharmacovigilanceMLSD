@@ -2,6 +2,12 @@
 An answer is released only if every citation resolves to text that was actually retrieved in this
 run, the quote is really in that text, and the route follows from the determination."""
 from pv.rules import ANCHORS, decide, squash
+from pv.corpus.glossary import term_regex
+
+
+def _same_term(left, right):
+    return (isinstance(left, str) and isinstance(right, str) and bool(left.strip()) and bool(right.strip())
+            and bool(term_regex(left).fullmatch(right.strip())))
 
 
 def run_verify(ctx):
@@ -16,8 +22,41 @@ def run_verify(ctx):
     for b in det["basis"]:
         checks += 1
         if b.get("kind") == "absence":
-            if not b.get("terms_searched"):
-                fails.append("absence_claim_without_search"); kind = "unsupported"
+            terms = b.get("terms_searched") or []
+            source = b.get("source")
+            if not isinstance(terms, list) or not terms or any(not isinstance(term, str) or not term.strip() for term in terms):
+                fails.append("absence_claim_without_search_terms"); kind = "unsupported"
+                terms = []
+            if not isinstance(source, str) or not source:
+                fails.append("absence_claim_without_label_source"); kind = "unsupported"
+                source = None
+            label_calls = [t for t in ctx.trace if t.get("type") == "tool_call" and
+                           t.get("tool") == "search_label" and t.get("source") == source]
+            searched = []
+            for call in label_calls:
+                args = call.get("args")
+                call_terms = args.get("terms", []) if isinstance(args, dict) else []
+                if isinstance(call_terms, list):
+                    searched.extend(call_terms)
+            if not terms or not all(any(_same_term(term, found) for found in searched) for term in terms):
+                fails.append("absence_claim_without_matching_label_search"); kind = "unsupported"
+            passages = []
+            missing_passages = []
+            for call in ctx.trace:
+                if call.get("type") != "tool_call" or call.get("source") != source:
+                    continue
+                for passage_id in call.get("passage_ids", []):
+                    passage = ev.get(passage_id)
+                    if passage is None:
+                        missing_passages.append(passage_id)
+                    elif passage.get("source") != source:
+                        fails.append(f"absence_search_source_mismatch:{passage_id}"); kind = "unsupported"
+                    else:
+                        passages.append(passage)
+            if missing_passages:
+                fails.append("absence_search_passage_not_retrieved"); kind = "unsupported"
+            if any(term_regex(term).search(p.get("text", "")) for term in terms for p in passages):
+                fails.append("absence_claim_contradicted_by_passage"); kind = "unsupported"
             continue
         p = ev.get(b.get("passage_id"))
         if p is None:

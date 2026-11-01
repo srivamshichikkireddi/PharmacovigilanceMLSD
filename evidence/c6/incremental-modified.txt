@@ -10,13 +10,13 @@ At line:14 char:1205
 
 Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
 Failed to send telemetry event CollectionGetEvent: capture() takes 1 positional argument but 3 were given
-embedded 1 new/changed chunks, removed 0, model=sentence-transformers/all-MiniLM-L6-v2
+embedded 1 new/changed chunks, removed 0, model=[configured embedding model; see local .env]
 {
   "built_utc": "2026-10-29T13:28:43.924769+00:00",
   "chunker_version": "2",
   "chunks": 1217,
   "reparsed_documents": 1,
-  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "embedding_model": "[configured embedding model; see local .env]",
   "embedded_chunks": 1217,
   "errors": [],
   "build_seconds": 12.12,

@@ -6,17 +6,25 @@ Two policies share one interface:
                  or repeats itself. This is the graceful-degradation path (A5).
 Termination never depends on the model: each need has a bounded number of attempts."""
 import json
+import re
 
-from pv.agents.tools import TOOL_SPECS, TOOLS
+from pv.agents.tools import SOURCES, TOOL_SPECS, TOOLS
 from pv.llm.client import LLMUnavailable, parse_json
 from pv.llm.prompts import render
 from pv.rules import ANCHORS, FLAG_ANCHOR, IPC, NDCT, anchor_query, find_anchor, match_label
+from pv.corpus.glossary import term_regex
 
 MAX_ATTEMPTS = 2
 
 
 def label_terms(ctx):
-    return list(dict.fromkeys(ctx.llm_terms + ctx.ents.get("candidate_terms", [])))[:8]
+    terms, seen = [], set()
+    for term in ctx.llm_terms + ctx.ents.get("candidate_terms", []):
+        key = re.sub(r"[\s\-]+", " ", term.strip().casefold())
+        if key and key not in seen:
+            seen.add(key)
+            terms.append(term)
+    return terms[:8]
 
 
 def label_has_specific_hit(ctx):
@@ -31,7 +39,7 @@ def required_anchors(ctx):
         return ["valid_icsr"]
     flags = e.get("seriousness_flags", [])
     a = [FLAG_ANCHOR[f] for f in flags] or ["sev_list"]
-    return a + (["tl_serious", "ndct_exception"] if flags else ["tl_nonserious", "ndct_psur"])
+    return a + (["tl_serious", "ndct_exception", "ndct_psur"] if flags else ["tl_nonserious", "ndct_psur"])
 
 
 def unmet_needs(ctx):
@@ -70,7 +78,6 @@ def rule_action(ctx, needs):
         if need in ("ndct_exception", "ndct_psur"):
             tl = next((p for p in ctx.evidence.values() if p["source"] == IPC and ("2.7.1" in p["text"] or "2.7.2" in p["text"])), None)
             if tl and not ctx.derived_done:
-                ctx.derived_done = True
                 return dict(need=need, tool="find_modifiers", args={"passage_id": tl["id"]}, why="does another provision modify the timeline just read?")
             dq = getattr(ctx, "derived_query", None)
             if dq and ctx.need_attempts.get(need, 0) == 0:
@@ -81,6 +88,75 @@ def rule_action(ctx, needs):
         if att == 0:
             return dict(need=need, tool="search_corpus", args={"query": anchor_query(need), "source": IPC, "k": 4 + 4 * strat}, why=f"find criterion text: {ANCHORS[need][2]}")
         return dict(need=need, tool="search_corpus", args={"query": "seriousness of the reaction tick appropriate reason for seriousness " + anchor_query(need), "source": IPC, "k": 8}, why="second formulation of the criterion query")
+    return None
+
+
+def _query_has(query, *phrases):
+    q = re.sub(r"[\s\-]+", " ", query.casefold())
+    return any(bool(re.search(r"\b" + re.escape(phrase) + r"\b", q)) if phrase.isdigit() else phrase in q
+               for phrase in phrases)
+
+
+def _action_need(ctx, needs, tool, args):
+    if tool == "search_label" and "label" in needs:
+        terms = args.get("terms")
+        candidates = label_terms(ctx)
+        if (set(args) == {"terms"} and isinstance(terms, list) and 1 <= len(terms) <= 4 and
+                all(isinstance(t, str) and any(term_regex(c).fullmatch(t.strip()) for c in candidates) for t in terms)):
+            return "label"
+        return None
+
+    if tool == "search_corpus":
+        query, source = args.get("query"), args.get("source")
+        k = args.get("k", 5)
+        if (set(args) - {"query", "source", "k"} or not isinstance(query, str) or not query.strip() or
+                source is not None and source not in SOURCES or type(k) is not int or not 1 <= k <= 8):
+            return None
+        if ("label" in needs and source == ctx.ents.get("label_source") and
+                any(term_regex(term).search(query) for term in label_terms(ctx))):
+            return "label"
+        for need in needs:
+            if need not in ANCHORS or source != ANCHORS[need][0]:
+                continue
+            if need == "tl_serious" and _query_has(query, "serious") and _query_has(query, "15", "fifteen"):
+                return need
+            if need == "tl_nonserious" and _query_has(query, "non serious") and _query_has(query, "90", "ninety"):
+                return need
+            if need == "ndct_exception" and _query_has(query, "unexpected") and _query_has(query, "15", "fifteen"):
+                return need
+            if need == "ndct_psur" and _query_has(query, "psur", "periodic safety update") and _query_has(query, "30", "thirty"):
+                return need
+            if need.startswith("sev_"):
+                terms = {
+                    "sev_death": ("death", "died", "fatal"),
+                    "sev_life": ("life-threatening", "life threatening"),
+                    "sev_hosp": ("hospital", "hospitalisation", "hospitalization"),
+                    "sev_disab": ("disability", "disabled"),
+                    "sev_cong": ("congenital anomaly", "birth defect"),
+                    "sev_med": ("medically important", "medical importance"),
+                    "sev_list": ("seriousness", "seriousness criteria"),
+                }.get(need, ())
+                if _query_has(query, *terms):
+                    return need
+            if need == "valid_icsr" and _query_has(query, "valid icsr", "minimum criteria", "minimum information"):
+                return need
+        return None
+
+    if tool == "get_clause":
+        identifier = args.get("identifier")
+        source = args.get("source")
+        if set(args) <= {"identifier", "source"} and isinstance(identifier, str) and source == IPC:
+            if "tl_serious" in needs and identifier == "2.7.1":
+                return "tl_serious"
+            if "tl_nonserious" in needs and identifier == "2.7.2":
+                return "tl_nonserious"
+        return None
+
+    if tool == "find_modifiers" and any(n in needs for n in ("ndct_exception", "ndct_psur")):
+        passage = ctx.evidence.get(args.get("passage_id")) if set(args) == {"passage_id"} else None
+        if (passage and passage.get("source") == IPC and
+                re.search(r"\b2\.7\.[12]\b", passage.get("text", ""))):
+            return next(n for n in needs if n in ("ndct_exception", "ndct_psur"))
     return None
 
 
@@ -95,12 +171,16 @@ def llm_action(ctx, needs):
         ctx.degrade("llm_unavailable:action")
         return None
     d = parse_json(text)
+    if d.get("action") == "continue":
+        return None
     tool, args = d.get("tool"), d.get("args")
     if tool in TOOLS and isinstance(args, dict):
+        need = _action_need(ctx, needs, tool, args)
         key = (tool, json.dumps(args, sort_keys=True))
-        if key not in ctx.seen_calls and (tool != "get_report_field"):
-            return dict(need=needs[0], tool=tool, args=args, why="chosen by model", chosen_by="llm")
-        ctx.emit("policy_override", reason="duplicate_or_useless_llm_choice", llm_choice=tool)
+        if need and key not in ctx.seen_calls:
+            return dict(need=need, tool=tool, args=args, why="chosen by model", chosen_by="llm")
+    ctx.emit("policy_override", reason="llm_action_not_relevant_to_unmet_need", llm_choice=tool)
+    ctx.degrade("llm_unusable:action")
     return None
 
 
@@ -117,6 +197,15 @@ def normalise_terms(ctx):
     except LLMUnavailable as exc:
         ctx.degrade("llm_unavailable:normalise")
         return
-    terms = parse_json(text).get("terms", [])
-    ctx.llm_terms = [t.strip() for t in terms if isinstance(t, str) and 2 < len(t) < 60][:6]
+    terms = parse_json(text).get("terms")
+    if not isinstance(terms, list):
+        ctx.degrade("llm_unusable:normalise")
+        ctx.emit("decision", what="llm_terms", terms=[], fallback="glossary")
+        return
+    valid_terms = [t.strip() for t in terms if isinstance(t, str) and 2 < len(t.strip()) < 60][:6]
+    if not valid_terms:
+        ctx.degrade("llm_unusable:normalise")
+        ctx.emit("decision", what="llm_terms", terms=[], fallback="glossary")
+        return
+    ctx.llm_terms = valid_terms
     ctx.emit("decision", what="llm_terms", terms=ctx.llm_terms)

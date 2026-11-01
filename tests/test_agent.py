@@ -1,7 +1,11 @@
 import json
 from tests.common import *
 from pv.agents import graph as G
+from pv.agents.state import RunContext
 from pv.llm.client import FakeLLM
+from pv.agents.policy import llm_action, normalise_terms, rule_action
+from pv.rules import extract_entities, load_drugs
+from pv.agents.verify import run_verify
 
 
 class Case41(unittest.TestCase):
@@ -48,6 +52,15 @@ class Escalation(unittest.TestCase):
         self.assertIn("reaction_unmatched", " ".join(res["escalation"]["reasons"]))
         self.assertEqual(res["basis"], [])
     def test_timing_unclear(self): self.assertIn("timing_unclear", self.reasons(reaction_description="Rash three months after starting.", hospitalization=False))
+    def test_vague_timing_some_time_after_escalates_despite_dates(self):
+        self.assertIn("timing_unclear", self.reasons(
+            reaction_description="A rash began some time after starting the medicine.", hospitalization=False))
+    def test_vague_timing_a_while_after_escalates_despite_dates(self):
+        self.assertIn("timing_unclear", self.reasons(
+            reaction_description="A rash appeared a while after I started the medicine.", hospitalization=False))
+    def test_vague_timing_after_a_while_escalates_despite_dates(self):
+        self.assertIn("timing_unclear", self.reasons(
+            reaction_description="After a while, I noticed a rash.", hospitalization=False))
     def test_narrative_conflict(self): self.assertIn("narrative_flag_conflict", self.reasons(hospitalization=False))
     def test_ime_without_flags(self): self.assertIn("medically_important", self.reasons(reaction_description="Clinic diagnosed Stevens-Johnson syndrome, outpatient.", hospitalization=False))
 
@@ -56,8 +69,12 @@ class Escalation(unittest.TestCase):
         self.assertEqual(res["route"], "periodic_safety_report"); self.assertEqual(res["deadline"]["days"], 90)
 
     def test_unlisted_specific_term_is_unexpected(self):
-        res, _ = run(clean(reaction_description="Tendon rupture in the ankle, needed surgery and a hospital stay.", reaction_date="2026-10-05"))
+        res, trace = run(clean(reaction_description="Tendon rupture in the ankle, needed surgery and a hospital stay.", reaction_date="2026-10-05"))
         self.assertEqual((res["route"], res["expectedness"]), ("expedited_report", "unexpected")); self.assertFalse(res["conflicts"])
+        self.assertEqual(res["verification"]["status"], "passed")
+        self.assertTrue(any(t["type"] == "tool_call" and t["tool"] == "search_label" and
+                            t["source"] == "tegretol_us_pi" and "tendon rupture" in t["args"]["terms"]
+                            for t in trace))
 
     def test_no_event_non_reportable(self):
         res, _ = run(clean(reaction_description="No adverse reaction occurred; caller asked about storage.", hospitalization=False))
@@ -69,6 +86,49 @@ class Escalation(unittest.TestCase):
 
 
 class Verification(Env):
+    def _verify_absence(self, trace, passages=None, terms=None):
+        ctx = RunContext("verify-absence", {}, INDEX, nollm(), settings, {})
+        ctx.ents["label_source"] = "tegretol_us_pi"
+        timeline = {
+            "id": "timeline", "source": "ipc_mah_v2", "page": 33,
+            "text": "All Serious Adverse Events must be reported by MAH within 15 calendar days of receipt of information from any source.",
+        }
+        ctx.evidence = {"timeline": timeline, **(passages or {})}
+        ctx.trace = trace
+        ctx.determination = {
+            "status": "ok", "basis": [
+                {"kind": "absence", "terms_searched": terms or ["tendon rupture"], "source": "tegretol_us_pi"},
+                {"anchor": "tl_serious", "passage_id": "timeline", "source": "ipc_mah_v2", "page": 33,
+                 "quote": timeline["text"]},
+            ],
+            "serious": True, "expectedness": "unexpected", "route": "expedited_report", "deadline": {"days": 15},
+        }
+        run_verify(ctx)
+        return ctx.verification
+
+    def test_absence_claim_fails_without_matching_label_search_in_trace(self):
+        trace = [{"type": "tool_call", "tool": "search_label", "source": "tegretol_us_pi",
+                  "args": {"terms": ["rash"]}, "passage_ids": []}]
+        verification = self._verify_absence(trace)
+        self.assertEqual(verification["status"], "failed")
+        self.assertIn("absence_claim_without_matching_label_search", verification["failures"])
+        self.assertTrue(verification["retryable"])
+
+    def test_absence_claim_fails_when_returned_passage_contains_term(self):
+        trace = [{"type": "tool_call", "tool": "search_label", "source": "tegretol_us_pi",
+                  "args": {"terms": ["tendon rupture"]}, "passage_ids": ["label-hit"]}]
+        passage = {"id": "label-hit", "source": "tegretol_us_pi", "page": 4,
+                   "text": "TENDON-RUPTURE has been reported."}
+        verification = self._verify_absence(trace, {"label-hit": passage})
+        self.assertEqual(verification["status"], "failed")
+        self.assertIn("absence_claim_contradicted_by_passage", verification["failures"])
+
+    def test_absence_claim_passes_after_matching_label_search_without_hits(self):
+        trace = [{"type": "tool_call", "tool": "search_label", "source": "tegretol_us_pi",
+                  "args": {"terms": ["tendon rupture"]}, "passage_ids": []}]
+        verification = self._verify_absence(trace)
+        self.assertEqual(verification["status"], "passed")
+
     def test_fabricated_citation_caught_then_researched(self):
         self.setenv(FAULT_INJECTION="fabricated_citation")
         res, trace = run()
@@ -139,6 +199,82 @@ class WithLLM(Env):
             return good_script(m)
         res, trace = run(llm=fake(script))
         self.assertNotIn("submitted", res["summary"].lower()); self.assertTrue(any(t["type"] == "guardrail" for t in trace))
+
+
+class RecordedProviderFailure(Env):
+    def test_recorded_unproductive_label_action_uses_rule_plan(self):
+        recorded_terms = '{"terms":["Exfoliative dermatitis","Skin exfoliation","Rash"]}'
+        recorded_action = '{"tool":"search_label","args":{"terms":["hospitalization","serious","exception"]}}'
+
+        def script(messages):
+            if "control the evidence search" in messages[-1]["content"]:
+                return recorded_action
+            return recorded_terms
+
+        report = clean()
+        ctx = RunContext("recorded-live-pv01", report, INDEX, fake(script), settings, load_drugs("corpus"))
+        ctx.ents, _ = extract_entities(report, ctx.drugs)
+        ctx.step_name = "evidence"
+        normalise_terms(ctx)
+
+        action = llm_action(ctx, ["label", "sev_hosp"])
+
+        self.assertEqual(ctx.llm_terms, ["Exfoliative dermatitis", "Skin exfoliation", "Rash"])
+        self.assertIsNone(action)
+        self.assertTrue(any(reason.startswith("llm_unusable:action") for reason in ctx.degraded))
+        fallback = rule_action(ctx, ["label", "sev_hosp"])
+        self.assertEqual(fallback["tool"], "search_label")
+        self.assertIn("toxic epidermal necrolysis", fallback["args"]["terms"])
+
+    def test_unusable_recorded_action_degrades_and_run_finishes_with_verified_citations(self):
+        action_calls = 0
+
+        def script(messages):
+            nonlocal action_calls
+            prompt = messages[-1]["content"]
+            if "control the evidence search" in prompt:
+                action_calls += 1
+                if action_calls == 1:
+                    return '{"tool":"search_label","args":{"terms":["hospitalization","serious","exception"]}}'
+                return '{"action":"continue"}'
+            if "pharmacovigilance reviewer" in prompt:
+                return '{"summary":"Serious listed reaction; 15-day expedited route recommended for QPPV confirmation."}'
+            return '{"terms":["Exfoliative dermatitis","Skin exfoliation","Rash"]}'
+
+        res, trace = run(llm=fake(script))
+
+        self.assertEqual(res["route"], "expedited_report")
+        self.assertEqual(res["verification"]["status"], "passed")
+        self.assertTrue(res["basis"])
+        self.assertTrue(any(reason.startswith("llm_unusable:action") for reason in res["degraded"]))
+        self.assertTrue(any(t["type"] == "tool_call" and t["tool"] == "search_label" and
+                            "rule" in t["why"] and "toxic epidermal necrolysis" in t["args"]["terms"]
+                            for t in trace))
+
+
+class UnverifiedFinalization(Env):
+    def test_failed_verification_withholds_seriousness_and_expectedness(self):
+        ctx = RunContext("failed-verification", clean(), INDEX, nollm(), settings, {})
+        ctx.determination = {
+            "status": "insufficient", "serious": True, "seriousness_reasons": ["hospitalization"],
+            "expectedness": "expected", "expectedness_confidence": 0.92, "route": "human_escalation",
+            "route_basis": "Insufficient evidence", "basis": [], "conflicts": [], "reasons": [],
+        }
+        ctx.verification = {"status": "failed", "failures": ["missing_evidence:tl_serious"],
+                            "checks": 0, "retryable": False}
+
+        G.node_finalize(ctx)
+        result = ctx.final
+
+        self.assertEqual(result["route"], "human_escalation")
+        self.assertIsNone(result["serious"])
+        self.assertIsNone(result["expectedness"])
+        self.assertEqual(result["assessment_status"], "unverified")
+        self.assertIn("seriousness", result["unverified_fields"])
+        self.assertIn("expectedness", result["unverified_fields"])
+        self.assertNotIn("partial_findings", result)
+        self.assertEqual(result["basis"], [])
+        self.assertTrue(result["escalation"]["path"])
 
 
 class Topology(unittest.TestCase):

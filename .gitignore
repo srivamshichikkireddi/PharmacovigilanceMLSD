@@ -4,3 +4,14 @@ __pycache__/
 *.pyc
 loadtest/results/*.csv
 .pytest_cache/
+.env 
+*.log
+tmp/
+temp/
+.venv/
+venv/
+docker-data/
+volumes/
+eval/results/phase7_api_pv01*.json
+eval/results/phase7_prompt_*.json
+eval/results/phase7_single_pass_v1.json

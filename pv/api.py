@@ -8,6 +8,7 @@ import json, logging, time, uuid
 import redis
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse, PlainTextResponse
+from starlette.concurrency import run_in_threadpool
 
 from pv import metrics, tracing
 from pv.config import settings
@@ -102,7 +103,7 @@ def contract():
 @app.post("/reports", status_code=202)
 async def submit_report(request: Request, nocache: bool = False):
     st, cid = store(), client_id(request)
-    ok, remaining = st.rate_limit(cid, settings.rate_limit_per_min)
+    ok, remaining = await run_in_threadpool(st.rate_limit, cid, settings.rate_limit_per_min)
     if not ok:
         metrics.RATE_LIMITED.inc()
         return JSONResponse({"error": "rate_limited", "detail": f"limit {settings.rate_limit_per_min}/minute per client"},
@@ -116,7 +117,7 @@ async def submit_report(request: Request, nocache: bool = False):
     else:
         clean, errors = validate_report(payload)
     if errors:                                              # D1: a malformed request must not start an agent run
-        rec = st.quarantine(raw, errors, cid)
+        rec = await run_in_threadpool(st.quarantine, raw, errors, cid)
         for e in errors:
             metrics.REJECTED.labels(e["code"]).inc()
         log_kv(log, "quarantined", quarantine_id=rec["quarantine_id"], codes=[e["code"] for e in errors])
@@ -124,13 +125,13 @@ async def submit_report(request: Request, nocache: bool = False):
                              "agent_run_started": False}, status_code=422)
     idem = request.headers.get("idempotency-key")
     if idem:
-        existing = st.idem_get_or_set(f"{cid}:{idem}", "pending")
+        existing = await run_in_threadpool(st.idem_get_or_set, f"{cid}:{idem}", "pending")
         if existing and existing != "pending":
             return JSONResponse({"run_id": existing, "status_url": f"/runs/{existing}", "idempotent_replay": True}, status_code=200)
     with tracing.span("api.submit"):
-        run_id = st.submit(clean, cid, tracing.inject_context(), bypass_cache=nocache)
+        run_id = await run_in_threadpool(st.submit, clean, cid, tracing.inject_context(), bypass_cache=nocache)
     if idem:
-        st.r.set(f"pv:idem:{cid}:{idem}", run_id, ex=86400)
+        await run_in_threadpool(st.r.set, f"pv:idem:{cid}:{idem}", run_id, ex=86400)
     correlation_id.set(run_id)
     log_kv(log, "run_submitted", client=cid)
     return JSONResponse({"run_id": run_id, "status": "queued", "status_url": f"/runs/{run_id}", "trace_url": f"/runs/{run_id}/trace",
@@ -173,14 +174,17 @@ async def feedback(run_id: str, request: Request):
         body = await request.json()
     except Exception:  # noqa
         return JSONResponse({"error": "invalid_json"}, status_code=400)
-    rec = store().get_run(run_id)
+    rec = await run_in_threadpool(store().get_run, run_id)
     if not rec:
         return JSONResponse({"error": "not_found"}, status_code=404)
     sat, reason = body.get("satisfactory"), (body.get("reason") or "")
     if not isinstance(sat, bool) or not isinstance(reason, str) or len(reason) > 500 or (not sat and len(reason.strip()) < 3):
         return JSONResponse({"error": "satisfactory (bool) required; reason (3-500 chars) required when unsatisfactory"}, status_code=422)
-    store().add_feedback({"ts": time.time(), "run_id": run_id, "satisfactory": sat, "reason": reason.strip(),
-                          "route": (rec.get("result") or {}).get("route")})
+    await run_in_threadpool(
+        store().add_feedback,
+        {"ts": time.time(), "run_id": run_id, "satisfactory": sat, "reason": reason.strip(),
+         "route": (rec.get("result") or {}).get("route")},
+    )
     metrics.FEEDBACK.labels(str(sat).lower()).inc()
     return {"recorded": True}
 

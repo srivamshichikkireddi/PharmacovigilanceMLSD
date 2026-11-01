@@ -100,7 +100,7 @@ Seriousness, expectedness and route come from the decision table in `rules.py`, 
 
 * **Parse:** `pdftotext` (poppler); `pypdf` fallback. We measured pypdf inserting stray spaces inside words on the Gazette PDF ("mus t") and returning ~4x more characters per page (noise), which breaks both exact-quote verification and TF-IDF.
 * **Chunk:** per page, 1,200-char window, 800-char stride (400 overlap, longer than the longest sentence we cite). Metadata: source, page, nearest clause number. Page-aware so every citation can name a page.
-* **Embed:** optional, `sentence-transformers/all-MiniLM-L6-v2` through LangChain's `Embeddings` into Chroma. Keyed by `(chunk_hash, model)`: changing the model or a chunk re-embeds only what changed (`VectorBackend.sync`), without rebuilding the index.
+* **Embed:** optional, using the embedding model configured by `EMBEDDING_MODEL` in `.env`, through LangChain's `Embeddings` into Chroma. Keyed by `(chunk_hash, model)`: changing the model or a chunk re-embeds only what changed (`VectorBackend.sync`), without rebuilding the index.
 * **Search:** TF-IDF (exact provision wording, clause ids) fused with vector similarity by reciprocal-rank fusion when vectors are enabled. A `LangChain` `BaseRetriever` adapter (`PVRetriever`) exposes the same index.
 * **The section 3 difficulty** (lay vs medical vocabulary) is attacked three ways: curated lay->medical glossary (works with no model), an LLM translation with a versioned prompt, and a follow-up query derived from the label text actually read. We do *not* claim embeddings alone solve it.
 

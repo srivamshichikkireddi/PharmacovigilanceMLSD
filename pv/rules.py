@@ -84,6 +84,13 @@ def narrative_latency_days(text):
     return n * _UNIT[m.group(2)]
 
 
+VAGUE_TIMING_RX = re.compile(
+    r"\b(?:(?:some\s+time|a\s+while|awhile|sometime)\s+(?:after|following|later)|"
+    r"after\s+(?:some\s+time|a\s+while|a\s+long\s+time))\b",
+    re.I,
+)
+
+
 HOSP_RX = re.compile(r"\b(admitted|admission|hospitali[sz]ed|hospitali[sz]ation|taken to (the )?hospital|in hospital|icu|intensive care)\b", re.I)
 DEATH_RX = re.compile(r"\b(died|death|passed away|fatal|deceased)\b", re.I)
 NO_EVENT_RX = re.compile(r"\b(no (adverse )?(reaction|event|side effect|problem)s?|did not (experience|have)|nothing (happened|unusual)|without any (reaction|problem|side effect))\b", re.I)
@@ -120,7 +127,7 @@ def extract_entities(report, drugs):
     reasons = []
     if generic is None:
         reasons.append("drug_outside_corpus")
-    if nl is not None and abs(nl - latency) > max(3, 0.5 * nl):
+    if VAGUE_TIMING_RX.search(text) or (nl is not None and abs(nl - latency) > max(3, 0.5 * nl)):
         reasons.append("timing_unclear")
     if mentions(HOSP_RX, text) and not report["hospitalization"]:
         reasons.append("narrative_flag_conflict:hospitalization")

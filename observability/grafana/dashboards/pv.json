@@ -545,8 +545,8 @@
       "type": "prometheus",
       "uid": "prom"
      },
-     "expr": "sum(rate(pv_llm_tokens_total[1m])) by (step)",
-     "legendFormat": "tokens {{step}}",
+     "expr": "sum(rate(pv_llm_tokens_total[1m])) by (agent, step)",
+     "legendFormat": "tokens {{agent}} / {{step}}",
      "refId": "A"
     },
     {
@@ -554,8 +554,8 @@
       "type": "prometheus",
       "uid": "prom"
      },
-     "expr": "sum(rate(pv_cost_usd_total[1m])) by (step)",
-     "legendFormat": "USD {{step}}",
+     "expr": "sum(rate(pv_cost_usd_total[1m])) by (agent, step)",
+     "legendFormat": "USD {{agent}} / {{step}}",
      "refId": "B"
     }
    ],

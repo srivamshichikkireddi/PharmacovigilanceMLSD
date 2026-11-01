@@ -6,22 +6,31 @@ services:
     environment: {STUB_DELAY_S: "${STUB_DELAY_S:-1.2}"}
     volumes: ["./loadtest/stub_llm.py:/stub/stub_llm.py:ro"]
     healthcheck: {test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:9000/',timeout=3)"], interval: 5s, retries: 10}
-    ports: ["9000:9000"]
+    ports: ["${LOADTEST_LLM_STUB_HOST_PORT:-19000}:9000"]
   api:
     environment: &lt
       LLM_PROVIDER: openai_compat
-      LLM_BASE_URL: http://llm-stub:9000/v1
-      LLM_API_KEY: stub
+      LLM_BASE_URL: ${LOADTEST_LLM_BASE_URL:?Set LOADTEST_LLM_BASE_URL in .env}
+      LLM_API_KEY: ""
+      LLM_MODEL: ${LOADTEST_LLM_MODEL:?Set LOADTEST_LLM_MODEL in .env}
+      LLM_MAX_RETRIES: "0"
+      LLM_MIN_INTERVAL_S: "0"
       CLIENT_RATE_LIMIT_PER_MINUTE: "100000"
-      RUN_CACHE_ENABLED: "false"
+      RUN_CACHE_ENABLED: "${LOADTEST_RUN_CACHE_ENABLED:-false}"
+      WORKER_CONCURRENCY: "4"
       QUALITY_SAMPLE_RATE: "0"
     depends_on: {llm-stub: {condition: service_healthy}}
+    ports: !override
+      - "${LOADTEST_API_HOST_PORT:-18000}:8000"
   agent-worker:
     environment: *lt
     depends_on: {llm-stub: {condition: service_healthy}}
+  jaeger:
+    ports: !override
+      - "${LOADTEST_JAEGER_HOST_PORT:-16687}:16686"
   locust:
     image: locustio/locust:2.32.4
     volumes: ["./loadtest:/mnt/locust", "./eval/scenarios.json:/mnt/locust/scenarios.json:ro"]
-    ports: ["8089:8089"]
+    ports: ["${LOCUST_HOST_PORT:-18089}:8089"]
     depends_on: [api]
     profiles: ["tools"]

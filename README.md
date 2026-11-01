@@ -2,17 +2,19 @@
 
 Multi-agent service that accepts an adverse-event report, validates it, assesses **seriousness** and **expectedness** against the NDCT Rules 2019, the IPC MAH guidance and a package insert, and recommends a reporting stream (**expedited / periodic / non-reportable**) with verbatim, page-level citations. It **escalates to a qualified person** whenever it cannot ground an answer. It never submits a regulatory report. Synthetic data only.
 
-> **New to the project? Read `docs/LEARN.md` first.** The Evaluation 1 corpus confirmation and project plan are in `docs/EVALUATION1_PROJECT_PLAN.md`. Demo: `docs/DEMO.md`.
+> **New to the project?** Start with this quick start. Learning notes are in `docs/LEARN.md`; demo instructions are in `docs/DEMO.md`.
 
 ## Run it (clean clone)
-Requires Docker with Compose v2. Nothing else runs outside containers. (`scripts/*.py` use only the Python standard library.)
+Requires Docker Desktop (or Docker Engine) with Compose v2, with the engine running. The service runs in containers; the demo client uses Python 3 and only the standard library.
 
-```bash
-git clone <repo-url> pv-service && cd pv-service
-cp .env.example .env              # works as-is: no model key needed (rules-only mode)
-docker compose up --build         # first build downloads images; later starts take seconds
+```powershell
+# From the repository root after cloning:
+Set-Location pv-service
+Copy-Item .env.example .env
+notepad .env  # Set a unique local GRAFANA_PASSWORD. Leave provider fields blank for rules-only mode.
+docker compose up --build
 ```
-When `docker compose ps` shows `api`, `agent-worker`, `redis` healthy (the `indexer` exits 0 after building the index):
+The first build downloads images. The one-shot `indexer` should exit successfully; API, worker, Redis, web, and observability services should become healthy. Check with `docker compose ps`.
 
 | URL | What |
 |---|---|
@@ -22,15 +24,31 @@ When `docker compose ps` shows `api`, `agent-worker`, `redis` healthy (the `inde
 | http://localhost:16686 | Jaeger (traces) |
 | http://localhost:9090 | Prometheus |
 
-Try it:
-```bash
-python scripts/demo.py submit case41      # the section 4.1 case
-python scripts/demo.py trace <run_id>     # every tool call, passage, prompt version, latency, cost
+Submit a valid **synthetic** report and poll its result from PowerShell:
+```powershell
+$today = Get-Date
+$report = @{
+    patient_age = 35
+    patient_sex = 'female'
+    suspect_drug = 'Tegretol (carbamazepine)'
+    start_date = $today.AddDays(-10).ToString('yyyy-MM-dd')
+    reaction_date = $today.AddDays(-7).ToString('yyyy-MM-dd')
+    reporter_type = 'doctor'
+    reaction_description = 'Synthetic demo: mild headache began a few days after starting the medicine.'
+} | ConvertTo-Json
+$accepted = Invoke-RestMethod -Method Post -Uri 'http://localhost:8000/reports' -ContentType 'application/json' -Body $report
+$accepted.run_id
+$result = Invoke-RestMethod -Uri "http://localhost:8000/runs/$($accepted.run_id)"
+while ($result.status -eq 'queued' -or $result.status -eq 'running') {
+    Start-Sleep -Seconds 1
+    $result = Invoke-RestMethod -Uri "http://localhost:8000/runs/$($accepted.run_id)"
+}
+$result.result | Select-Object route, serious, expectedness, basis, escalation
 ```
-Scale the agents: `docker compose up -d --scale agent-worker=3`.
+For the section 4.1 synthetic case and a full trace: `python scripts/demo.py submit case41`, then `python scripts/demo.py trace <run_id>`. Scale the agents with `docker compose up -d --scale agent-worker=3`.
 
 ### Add a model (optional)
-Any OpenAI-compatible provider (free tier or local Ollama). Edit `.env`: `LLM_PROVIDER=openai_compat`, `LLM_BASE_URL`, `LLM_API_KEY`, `LLM_MODEL`. **Set a spending limit on the account first.** Recreate workers: `docker compose up -d --force-recreate agent-worker`. Optional vector retrieval: build with `WITH_EMBEDDINGS=1` and set `EMBEDDINGS_ENABLED=true` (large image: CPU torch + sentence-transformers).
+An OpenAI-compatible provider can be enabled by setting `LLM_PROVIDER`, `LLM_BASE_URL`, `LLM_API_KEY`, and `LLM_MODEL` in `.env`. **Set a spending limit on the account first.** Recreate workers: `docker compose up -d --force-recreate agent-worker`. Optional vector retrieval: build with `WITH_EMBEDDINGS=1`, set `EMBEDDINGS_ENABLED=true`, and configure `EMBEDDING_MODEL` in `.env` (large image: CPU torch + sentence-transformers).
 
 ## API
 | Method & path | Purpose |
@@ -69,7 +87,7 @@ Declared SLO: `docs/SLO.md` (commit it *before* measuring).
 `pv/` application · `prompts/` versioned prompts · `corpus/` source PDFs + `drugs.json` · `eval/` scenarios + results · `tests/` · `loadtest/` · `observability/` · `frontend/` · `scripts/` · `docs/` (architecture, data contract, SLO, runbook, incident log, evaluation, report, learning guide, demo)
 
 ## Configuration
-Everything environment-specific is injected at runtime; see `.env.example` (documented). The repository contains no credentials, endpoints or model identifiers.
+Runtime provider credentials, endpoints, and model identifiers belong in the local `.env`; keep that file untracked. `.env.example` contains blank provider fields and no real credentials.
 
 ## Status and honesty
-C0-C6 are recorded in Git. The 57-test suite passed (4 skipped); Docker/API and observability were exercised; the C5 Gemini comparison was mostly degraded and did not change the production prompt; C6 vector retrieval and incremental embeddings were exercised. A later dependency-alignment image rebuild stalled during Docker unpacking, so verify a fresh embedding-enabled build and tracing before relying on it. Locust/SLO, cache-effect and cost measurements remain outstanding; do not treat the C4 smoke batch as a load test. The evaluation labels need an independent reviewer. Limitations: the selected label is a US Tegretol insert, there is one drug, guardrails are rule-based, and the serious-expected IPC/NDCT conflict remains flagged for QPPV confirmation. See `docs/EVALUATION1_PROJECT_PLAN.md` and `docs/LEARN.md`.
+C0-C6 are recorded in Git. The 57-test suite passed (4 skipped); Docker/API and observability were exercised; the C5 configured-provider comparison was mostly degraded and did not change the production prompt; C6 vector retrieval and incremental embeddings were exercised. A later dependency-alignment image rebuild stalled during Docker unpacking, so verify a fresh embedding-enabled build and tracing before relying on it. Locust/SLO, cache-effect and cost measurements remain outstanding; do not treat the C4 smoke batch as a load test. The evaluation labels need an independent reviewer. Limitations: the selected label is a US Tegretol insert, there is one drug, guardrails are rule-based, and the serious-expected IPC/NDCT conflict remains flagged for QPPV confirmation. See `docs/EVALUATION1_PROJECT_PLAN.md` and `docs/LEARN.md`.

@@ -43,6 +43,8 @@ class Settings:
     @property
     def llm_max_retries(self): return env_int("LLM_MAX_RETRIES", 2)
     @property
+    def llm_min_interval_s(self): return env_float("LLM_MIN_INTERVAL_S", 0)
+    @property
     def price_in_per_1m(self): return env_float("LLM_PRICE_IN_PER_1M", 0.15)    # notional USD
     @property
     def price_out_per_1m(self): return env_float("LLM_PRICE_OUT_PER_1M", 0.60)  # notional USD

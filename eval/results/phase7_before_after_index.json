@@ -1,0 +1,64 @@
+{
+  "title": "Phase 7 baseline-versus-agentic results; A3 refresh status",
+  "pre_a3_full_set": {
+    "before_baseline": {
+      "file": "phase7_single_pass_v1.json",
+      "mode": "single_pass_retrieval_one_shot_answer",
+      "status": "complete historical run"
+    },
+    "after_agentic_v1": {
+      "file": "phase7_prompt_v1.json",
+      "mode": "agentic",
+      "status": "complete historical run; pre-A3"
+    },
+    "after_agentic_v2": {
+      "file": "phase7_prompt_v2.json",
+      "mode": "agentic",
+      "status": "complete historical run; pre-A3"
+    }
+  },
+  "post_a3_refresh": {
+    "before_baseline_file": "phase7_single_pass_v1.json",
+    "agentic_v1": {
+      "file": "phase7_prompt_v1_a3_partial.json",
+      "scenario_ids": [
+        "PV-01",
+        "PV-02",
+        "PV-03",
+        "PV-04",
+        "PV-05",
+        "PV-06",
+        "PV-07"
+      ],
+      "n": 7,
+      "metrics": {
+        "scenarios": 7,
+        "valid_cases": 7,
+        "boundary_cases": 0,
+        "route_accuracy": 1.0,
+        "answered_rate": 1.0,
+        "seriousness_accuracy": 1.0,
+        "expectedness_accuracy": 1.0,
+        "escalation_reason_accuracy": null,
+        "boundary_rejection_rate": null,
+        "groundedness": 1.0,
+        "faithfulness": 1.0,
+        "context_relevance": 0.5875,
+        "context_recall": 0.8643,
+        "hallucination_rate": 0.0,
+        "unsafe_answer_rate": null,
+        "mean_tool_calls": 4.8571,
+        "mean_cost_usd": 0.0004
+      }
+    },
+    "agentic_v2": {
+      "scenario_ids": [],
+      "n": 0,
+      "metrics": null,
+      "status": "not rerun; provider rate-limit/quota stopped v1 at PV-08"
+    },
+    "shared_completed_scenario_ids": [],
+    "v1_v2_comparison": null,
+    "note": "The A3 refresh has no common completed v1/v2 scenarios; post-A3 prompt differences cannot be estimated."
+  }
+}

@@ -913,5 +913,74 @@
    "error_code": "type"
   },
   "gold": []
+ },
+ {
+  "id": "PV-27",
+  "kind": "valid",
+  "description": "Vague onset phrasing: some time after starting",
+  "report": {
+   "patient_age": 35,
+   "patient_sex": "female",
+   "suspect_drug": "Tegretol (carbamazepine)",
+   "start_date": "2026-10-01",
+   "reaction_date": "2026-10-08",
+   "received_date": "2026-10-26",
+   "reporter_type": "doctor",
+   "reaction_description": "A rash began some time after starting the medicine.",
+   "hospitalization": false
+  },
+  "expect": {
+   "route": "human_escalation",
+   "serious": null,
+   "expectedness": null,
+   "escalation_reasons": ["timing_unclear"]
+  },
+  "gold": []
+ },
+ {
+  "id": "PV-28",
+  "kind": "valid",
+  "description": "Vague onset phrasing: a while after starting",
+  "report": {
+   "patient_age": 35,
+   "patient_sex": "female",
+   "suspect_drug": "Tegretol (carbamazepine)",
+   "start_date": "2026-10-01",
+   "reaction_date": "2026-10-08",
+   "received_date": "2026-10-26",
+   "reporter_type": "doctor",
+   "reaction_description": "A rash appeared a while after I started the medicine.",
+   "hospitalization": false
+  },
+  "expect": {
+   "route": "human_escalation",
+   "serious": null,
+   "expectedness": null,
+   "escalation_reasons": ["timing_unclear"]
+  },
+  "gold": []
+ },
+ {
+  "id": "PV-29",
+  "kind": "valid",
+  "description": "Vague onset phrasing: after a while",
+  "report": {
+   "patient_age": 35,
+   "patient_sex": "female",
+   "suspect_drug": "Tegretol (carbamazepine)",
+   "start_date": "2026-10-01",
+   "reaction_date": "2026-10-08",
+   "received_date": "2026-10-26",
+   "reporter_type": "doctor",
+   "reaction_description": "After a while, I noticed a rash.",
+   "hospitalization": false
+  },
+  "expect": {
+   "route": "human_escalation",
+   "serious": null,
+   "expectedness": null,
+   "escalation_reasons": ["timing_unclear"]
+  },
+  "gold": []
  }
 ]

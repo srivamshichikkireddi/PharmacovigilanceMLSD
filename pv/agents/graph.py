@@ -49,6 +49,7 @@ def _template_summary(ctx, res):
 def node_finalize(ctx):
     det, ver = ctx.determination, ctx.verification
     reasons = list(dict.fromkeys(ctx.early_reasons))
+    assessment_unverified = bool(det and (not ver or ver.get("status") != "passed"))
     if getattr(ctx, "agent_error", None):
         reasons.append(f"agent_failed:{ctx.agent_error}")
     if ctx.budget_exhausted:
@@ -57,15 +58,18 @@ def node_finalize(ctx):
         reasons += det["reasons"]
     if det is None and not reasons:
         reasons.append("no_determination")
-    if ver and ver["status"] == "failed":
-        reasons.append("verification_failed")
+    if assessment_unverified:
+        reasons.append("verification_failed" if ver and ver.get("status") == "failed" else "verification_not_passed")
     reasons = list(dict.fromkeys(reasons))
     escalate = bool(reasons) or det is None or det.get("route") == "human_escalation"
     res = {
         "run_id": ctx.run_id, "route": "human_escalation" if escalate else det["route"],
-        "serious": det.get("serious") if det else None, "seriousness_reasons": det.get("seriousness_reasons", []) if det else [],
-        "expectedness": det.get("expectedness") if det else None,
-        "expectedness_confidence": det.get("expectedness_confidence") if det else None,
+        "serious": det.get("serious") if det and not assessment_unverified else None,
+        "seriousness_reasons": det.get("seriousness_reasons", []) if det and not assessment_unverified else [],
+        "expectedness": det.get("expectedness") if det and not assessment_unverified else None,
+        "expectedness_confidence": det.get("expectedness_confidence") if det and not assessment_unverified else None,
+        "assessment_status": "unverified" if assessment_unverified else "verified" if ver and ver.get("status") == "passed" else "not_assessed",
+        "unverified_fields": ["seriousness", "expectedness"] if assessment_unverified else [],
         "route_basis": (det or {}).get("route_basis") if not escalate else
                        "Escalated: " + ", ".join(reasons) if reasons else "Escalated to a qualified person.",
         "deadline": det.get("deadline") if (det and not escalate) else None,
@@ -77,7 +81,7 @@ def node_finalize(ctx):
         "verification": ver, "degraded": ctx.degraded, "entities": {k: v for k, v in ctx.ents.items() if k != "reaction_text"},
         "disclaimer": DISCLAIMER,
     }
-    if escalate and det:
+    if escalate and det and not assessment_unverified:
         res["partial_findings"] = {"serious": det.get("serious"), "expectedness": det.get("expectedness"),
                                    "expectedness_confidence": det.get("expectedness_confidence"), "seriousness_reasons": det.get("seriousness_reasons")}
     # justification text: LLM-drafted when available, filtered; template otherwise
@@ -99,6 +103,8 @@ def node_finalize(ctx):
     if viol:                                           # the system may not issue what it is not authorised to
         ctx.emit("guardrail", kind="output_filter_blocked_result", violations=viol)
         res.update(route="human_escalation", basis=[], deadline=None,
+                   serious=None, seriousness_reasons=[], expectedness=None, expectedness_confidence=None,
+                   assessment_status="unverified", unverified_fields=["seriousness", "expectedness"],
                    escalation={"required": True, "reasons": reasons + ["output_filter_blocked"], "path": "QPPV review"},
                    summary="Output withheld by the safety filter; escalated to a qualified person.")
     ctx.final = res

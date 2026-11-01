@@ -19,6 +19,8 @@ class HTTP(unittest.TestCase):
 
     def test_submit_202_and_poll(self):
         r = self.c.post("/reports", json=CASE41, headers={"X-Client-Id": "t"}); self.assertEqual(r.status_code, 202)
+        self.assertTrue(r.json()["run_id"])
+        self.assertEqual(r.json()["status"], "queued")
         self.assertEqual(self.c.get(r.json()["status_url"]).json()["status"], "queued")
 
     def test_malformed_is_422_quarantined_and_starts_no_run(self):

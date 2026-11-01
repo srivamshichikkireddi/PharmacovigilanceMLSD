@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Drives the live demo against a running stack (stdlib only).   python scripts/demo.py --help"""
-import argparse, json, sys, time, urllib.error, urllib.request
+import argparse, json, os, sys, time, urllib.error, urllib.request
 from datetime import date, timedelta
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-API = "http://127.0.0.1:8000"
-STUB = "http://127.0.0.1:9000"
+API = os.environ.get("PV_DEMO_API_URL", "http://127.0.0.1:8000").rstrip("/")
+STUB = os.environ.get("PV_DEMO_STUB_URL", "http://127.0.0.1:9000").rstrip("/")
 d = lambda n: (date.today() - timedelta(days=n)).isoformat()
 BASE = {"patient_age": 35, "patient_sex": "female", "suspect_drug": "Tegretol (carbamazepine)", "start_date": d(10), "reaction_date": d(3), "reporter_type": "doctor"}
 CASES = {
@@ -83,9 +83,15 @@ def trace(run_id):
 def breaker():
     print("1) switching the LLM stub to FAIL (provider outage)"); http("POST", f"{STUB}/admin", {"mode": "fail"})
     ids = [submit("case41", wait=True) for _ in range(4)]
-    print("\n2) the first runs retry with backoff and trip the breaker; later runs fast-fail and use the rule-based fallback. Trace of the last run:")
+    print("\n2) failures trip the breaker; later runs fast-fail and use the rule-based fallback. Trace of the last run:")
     trace(ids[-1])
-    print("\n3) restoring the provider; after the cool-down the breaker half-opens, probes, and closes"); http("POST", f"{STUB}/admin", {"mode": "ok"})
+    print("\n3) restoring the stub and waiting for the breaker cooldown"); http("POST", f"{STUB}/admin", {"mode": "ok"})
+    cooldown = max(0.0, float(os.environ.get("PV_DEMO_BREAKER_COOLDOWN_S", "20")))
+    time.sleep(cooldown + 0.1)
+    print("\n4) submitting one probe after cooldown; it should use the stub and close the breaker")
+    probe_id = submit("case41", wait=True)
+    if probe_id:
+        trace(probe_id)
 
 
 if __name__ == "__main__":

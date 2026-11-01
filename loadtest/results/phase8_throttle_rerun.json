@@ -1,0 +1,104 @@
+{
+  "title": "Phase 8 cache-off measurements before and after zero-interval concurrency fix",
+  "conditions": {
+    "locust_duration": "7m",
+    "stages_users": [2, 4, 8, 12, 16, 24, 32],
+    "seconds_per_stage": 60,
+    "stub_delay_seconds": 1.2,
+    "stub_jitter": "plus/minus 15 percent",
+    "run_cache_enabled": false,
+    "llm_min_interval_seconds": 0,
+    "llm_max_retries": 0,
+    "declared_slo": "p95 <= 30s, >= 1 completed run/s, zero failed runs with 3 workers"
+  },
+  "root_cause": {
+    "before": "OpenAICompat.chat held one per-process lock during every HTTP request, even when min_interval_s was zero. Four worker threads therefore serialized their LLM requests and occupied slots while waiting.",
+    "after": "The lock and interval wait are used only when min_interval_s is positive. At zero, concurrent requests proceed without provider interval throttling. Positive configured intervals remain serialized and spaced."
+  },
+  "old_cache_off": {
+    "one_worker": {
+      "locust_e2e_runs": 108,
+      "locust_e2e_failures": 6,
+      "throughput_runs_per_second": 0.1811,
+      "p50_seconds": 81.0,
+      "p95_seconds": 180.0,
+      "first_rolling_p95_breach_users": 4,
+      "first_rolling_p95_seconds": 33.0
+    },
+    "three_workers": {
+      "locust_e2e_runs": 218,
+      "locust_e2e_failures": 0,
+      "throughput_runs_per_second": 0.4497,
+      "p50_seconds": 29.0,
+      "p95_seconds": 67.0,
+      "first_rolling_p95_breach_users": 12,
+      "first_rolling_p95_seconds": 32.0
+    },
+    "historical_queue_run_call_split": "unavailable: the original isolated Redis volumes were removed; saved Locust CSVs contain end-to-end timings only"
+  },
+  "rerun_after_fix": {
+    "one_worker": {
+      "locust_submissions": 295,
+      "locust_e2e_runs": 294,
+      "locust_e2e_failures": 0,
+      "throughput_runs_per_second": 0.5406,
+      "p50_seconds": 19.0,
+      "p95_seconds": 44.0,
+      "first_rolling_p95_breach_users": 24,
+      "first_rolling_p95_seconds": 31.0,
+      "completed_uncached_run_records": 295,
+      "mean_queue_wait_seconds": 23.252,
+      "mean_run_seconds": 5.618,
+      "mean_end_to_end_seconds": 28.87,
+      "model_calls": 1330,
+      "mean_model_call_ms": 1227.5,
+      "model_calls_per_run": 4.508,
+      "tool_calls": 1003,
+      "mean_tool_call_ms": 17.7,
+      "tool_calls_per_run": 3.4,
+      "model_calls_by_step": {
+        "normalise_terms": {"calls": 200, "mean_ms": 1228.4},
+        "evidence_action": {"calls": 1003, "mean_ms": 1227.9},
+        "draft_summary": {"calls": 127, "mean_ms": 1223.3}
+      },
+      "tool_calls_by_name": {
+        "search_label": {"calls": 200, "mean_ms": 1.6},
+        "search_corpus": {"calls": 416, "mean_ms": 0.7},
+        "get_clause": {"calls": 187, "mean_ms": 7.3},
+        "find_modifiers": {"calls": 200, "mean_ms": 79.1}
+      }
+    },
+    "three_workers": {
+      "locust_submissions": 600,
+      "locust_e2e_runs": 599,
+      "locust_e2e_failures": 0,
+      "throughput_runs_per_second": 1.3807,
+      "p50_seconds": 8.6,
+      "p95_seconds": 17.0,
+      "first_rolling_p95_breach_users": null,
+      "completed_uncached_run_records": 600,
+      "mean_queue_wait_seconds": 2.983,
+      "mean_run_seconds": 5.925,
+      "mean_end_to_end_seconds": 8.908,
+      "model_calls": 2869,
+      "mean_model_call_ms": 1220.6,
+      "model_calls_per_run": 4.782,
+      "tool_calls": 2189,
+      "mean_tool_call_ms": 18.1,
+      "tool_calls_per_run": 3.648
+    }
+  },
+  "slo_result": {
+    "three_workers_cache_off": "met",
+    "one_worker_comparison": "p95 and throughput fail the numeric targets; the first rolling p95 breach is at 24 users"
+  },
+  "locust_csv_prefixes": [
+    "loadtest/results/phase8_rerun_off_w1",
+    "loadtest/results/phase8_rerun_off_w3"
+  ],
+  "data_notes": [
+    "Run and call means are computed from completed uncached Redis run records and their traces.",
+    "The 3-worker API counter showed 601 runs while this aggregation found 600 completed uncached run records and Locust recorded 600 submissions/599 E2E rows; the discrepancy is unresolved.",
+    "The 1-worker Locust E2E count is one below submissions; all 295 submitted runs were present as completed uncached records after the queue drained."
+  ]
+}

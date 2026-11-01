@@ -97,8 +97,9 @@ def call_tool(ctx, name, args, why=""):
         res, err = {"passage_ids": []}, f"{type(exc).__name__}: {exc}"[:120]
     lat = time.monotonic() - t0
     metrics.TOOL_SECONDS.labels(name).observe(lat)
+    source = ctx.ents.get("label_source") if name == "search_label" else args.get("source")
     ctx.emit("tool_call", tool=name, args=args, why=why, latency_ms=round(lat * 1000), passage_ids=res.get("passage_ids", []),
-             error=err, backend=ctx.index.backend,
+             error=err, backend=ctx.index.backend, **({"source": source} if source else {}),
              **({"derived_query": res["derived_query"], "cues": res["cues"]} if "derived_query" in res else {}))
     if err:
         res = {**res, "error": err}

@@ -49,6 +49,7 @@ function render(j){
   c.append(el("div","route "+r.route,r.route.replaceAll("_"," ").toUpperCase()));
   c.append(el("p",0,r.summary));
   if(r.deadline)c.append(el("p",0,"Clock: "+r.deadline.days+" calendar days from "+r.deadline.clock_starts+" → due "+r.deadline.due_date));
+  if(r.assessment_status==="unverified")c.append(el("p","warn","Seriousness and expectedness are unverified and withheld because evidence verification did not pass."));
   c.append(el("p",0,"Seriousness: "+(r.serious===null?"n/a":r.serious?"serious ("+r.seriousness_reasons.join(", ")+")":"non-serious")+
      "   |   Expectedness: "+(r.expectedness||"n/a")+(r.expectedness_confidence?" ("+r.expectedness_confidence+")":"")));
   (r.conflicts||[]).forEach(t=>c.append(el("p","warn","⚠ Provision conflict: "+t)));
@@ -60,7 +61,8 @@ function render(j){
   r.basis.forEach(b=>{const d=el("div","cite");d.append(el("div",0,b.claim));
     d.append(el("div","src",b.kind==="absence"?"Searched the package insert for: "+b.terms_searched.join(", ")+" (not found)":b.source+" · page "+b.page+" · "+b.passage_id));
     if(b.quote)d.append(el("em",0,"“"+b.quote+"”"));c.append(d)});
-  c.append(el("small",0,"Verification: "+r.verification.status+" · steps "+r.steps+" · tool calls "+r.tool_calls+" · prompts "+JSON.stringify(r.prompt_versions)+
+  const verificationStatus=r.verification?r.verification.status:"not run (early escalation)";
+  c.append(el("small",0,"Verification: "+verificationStatus+" · steps "+r.steps+" · tool calls "+r.tool_calls+" · prompts "+JSON.stringify(r.prompt_versions)+
      " · cost $"+r.cost.total_usd+" · end-to-end "+r.end_to_end_seconds+"s · "+r.mode+(r.cache_hit?" · cache hit":"")));
   c.append(el("p"));const a=el("a",0,"Open full trace");a.href=API+"/runs/"+j.run_id+"/trace";a.target="_blank";c.append(a);
   const fb=el("p");fb.append("Was this useful? ");

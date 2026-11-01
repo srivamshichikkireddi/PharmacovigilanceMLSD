@@ -38,10 +38,10 @@ def run_evidence(ctx):
             ctx.seen_calls.add(key)
             need = action["need"]
             res = call_tool(ctx, action["tool"], action["args"], f"[{action['chosen_by']}] {action['why']}")
-            if action["tool"] == "find_modifiers" and "derived_query" in res:
-                ctx.derived_query = res["derived_query"]
             if action["tool"] == "find_modifiers":
-                pass                                  # reading a passage for modifiers is not an attempt at the need itself
+                ctx.derived_done = True
+                if "derived_query" in res:
+                    ctx.derived_query = res["derived_query"]
             elif need == "label":
                 ctx.label_stage += 1
             else:

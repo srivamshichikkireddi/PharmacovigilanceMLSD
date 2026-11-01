@@ -23,7 +23,7 @@
         "pages": 25
       }
     ],
-    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "embedding_model": "[configured embedding model; see local .env]",
     "throughput_chunks_per_s": 8.0
   }
 }
