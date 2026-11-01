@@ -3,7 +3,7 @@
 > **Rule zero from the brief: if the system does not start and serve a valid request at the demo, the mark is zero.** Everything below is secondary to rehearsing item 1 on the *exact machine and network* you will present on.
 
 ## T-24h and T-1h checklist
-- [ ] Fresh clone on the demo machine: clone the course repository URL, enter `pv-service`, run `Copy-Item .env.example .env`, then `docker compose up --build -d`. Time it. Fix whatever breaks (Docker not running, a port already in use, no internet for the image build, or cAdvisor mounts on Windows).
+- [ ] Fresh clone on the demo machine: clone the course repository URL; the repository root is the project root. Run `Copy-Item .env.example .env`, then `docker compose up --build -d`. Time it. Fix whatever breaks (Docker not running, a port already in use, no internet for the image build, or cAdvisor mounts on Windows).
 - [ ] `docker compose build` the night before and **do not clear the build cache**; at the demo, `up` should take seconds.
 - [ ] Pre-pull images (`docker compose pull`) so a flaky venue Wi-Fi cannot stop you.
 - [ ] Have `python scripts/demo.py --help` working (stdlib only, Python 3.8+).
@@ -22,7 +22,7 @@ docker compose up --build -d
 docker compose ps
 Invoke-RestMethod http://localhost:8000/ready | ConvertTo-Json -Depth 6
 ```
-The same commands work after cloning the course repository and changing into its `pv-service` directory. Expected state: redis, api, agent-worker and observability services healthy; indexer exits successfully after building the index. `/ready` reports `ready: true`, at least one worker, queue depth, chunks, corpus version and build time.
+The same commands work from the root of a fresh clone; all paths in this playbook are relative to that root. Expected state: redis, api, agent-worker and observability services healthy; indexer exits successfully after building the index. `/ready` reports `ready: true`, at least one worker, queue depth, chunks, corpus version and build time.
 *Say:* the indexer is a one-shot that must complete before api/worker start; deployment boundaries are justified in `ARCHITECTURE.md`.
 
 ### 2. Valid request -> routed recommendation with citations

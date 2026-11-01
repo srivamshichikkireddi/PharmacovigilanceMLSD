@@ -9,7 +9,6 @@ Requires Docker Desktop (or Docker Engine) with Compose v2, with the engine runn
 
 ```powershell
 # From the repository root after cloning:
-Set-Location pv-service
 Copy-Item .env.example .env
 notepad .env  # Set a unique local GRAFANA_PASSWORD. Leave provider fields blank for rules-only mode.
 docker compose up --build
@@ -65,20 +64,31 @@ An OpenAI-compatible provider can be enabled by setting `LLM_PROVIDER`, `LLM_BAS
 Contract details: `docs/DATA_CONTRACT.md`.
 
 ## Without Docker (logic only)
-```bash
-pip install -r requirements-dev.txt            # python 3.10+; poppler-utils recommended (pdftotext)
-python -m pv.corpus.build                      # idempotent index build  -> data/index
-python -m unittest discover -s tests -t .      # 57 tests (4 need FastAPI)
-python -m pv.eval.run --validate-gold          # gold passages exist in the corpus
-python -m pv.eval.run --label agentic          # 26-scenario evaluation
-AGENTIC_RETRIEVAL=false python -m pv.eval.run --label single_pass_baseline   # the "before"
+```powershell
+python -m pip install -r requirements.txt -r requirements-dev.txt
+python -m pv.corpus.build
+python -m unittest discover -s tests -t .       # 77 tests
+python -m pv.eval.run --validate-gold
+$env:LLM_PROVIDER = 'none'
+python -m pv.eval.run --label agentic           # 29 scenarios
+$env:AGENTIC_RETRIEVAL = 'false'
+python -m pv.eval.run --label single_pass_baseline
 ```
+The corpus build is idempotent. `poppler-utils` (`pdftotext`) is recommended for PDF extraction. The full service stack and Locust load tests require Docker; this section runs local logic/evaluation only.
 
 ## Load test (stub LLM)
+Before starting the load-test overlay, add these values to your local `.env` (the Compose service name is used inside the Docker network; do not use `localhost`):
+```dotenv
+LOADTEST_LLM_BASE_URL=http://llm-stub:9000/v1
+LOADTEST_LLM_MODEL=loadtest-stub
+```
+The stub returns fixed responses with a realistic delay; the model label is required by the client but is not used by the stub. These settings are needed only for the load-test overlay.
+
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.loadtest.yml up --build -d --scale agent-worker=3
 docker compose -f docker-compose.yml -f docker-compose.loadtest.yml run --rm locust -f /mnt/locust/locustfile.py \
    --host http://api:8000 --headless --csv /mnt/locust/results/w3 --csv-full-history
+# Wait until the CSV files have been written under loadtest/results/; press Ctrl+C when the CSVs have been written.
 python loadtest/analyze.py loadtest/results/w3
 ```
 Declared SLO: `docs/SLO.md` (commit it *before* measuring).
@@ -90,4 +100,8 @@ Declared SLO: `docs/SLO.md` (commit it *before* measuring).
 Runtime provider credentials, endpoints, and model identifiers belong in the local `.env`; keep that file untracked. `.env.example` contains blank provider fields and no real credentials.
 
 ## Status and honesty
-C0-C6 are recorded in Git. The 57-test suite passed (4 skipped); Docker/API and observability were exercised; the C5 configured-provider comparison was mostly degraded and did not change the production prompt; C6 vector retrieval and incremental embeddings were exercised. A later dependency-alignment image rebuild stalled during Docker unpacking, so verify a fresh embedding-enabled build and tracing before relying on it. Locust/SLO, cache-effect and cost measurements remain outstanding; do not treat the C4 smoke batch as a load test. The evaluation labels need an independent reviewer. Limitations: the selected label is a US Tegretol insert, there is one drug, guardrails are rule-based, and the serious-expected IPC/NDCT conflict remains flagged for QPPV confirmation. See `docs/EVALUATION1_PROJECT_PLAN.md` and `docs/LEARN.md`.
+The current suite passes **77 tests**; `eval/scenarios.json` contains **29 scenarios**. Stub-backed Locust load tests and run-cache effects have been measured (see `docs/REPORT.md`): with three workers and cache off, the corrected ramp met the declared SLO through 32 users (1.3807 runs/s, p95 17 s), while the separate 48/64/96-user ramp first breached the p95 target at 64 users. Run-cache p95 and estimated cost effects were also measured.
+
+Known limitations: the **post-A3 L2/L3 provider comparison is partial**. The provider quota stopped the refreshed v1 run at PV-08; post-A3 v2 ran no scenarios, so there is no current prompt winner or full post-fix 29-scenario provider aggregate. Historical pre-A3 comparisons are not post-fix evidence. **Default retrieval is lexical TF-IDF only** (`EMBEDDINGS_ENABLED=false`); vector retrieval and incremental embedding behavior were exercised separately, but a fresh embedding-enabled image rebuild remains unverified. The selected label is a US Tegretol insert, the corpus covers one drug, evaluation labels need an independent reviewer, guardrails are rule-based, and the serious-expected IPC/NDCT conflict remains flagged for QPPV confirmation. See `docs/EVALUATION.md`, `docs/REPORT.md`, `docs/EVALUATION1_PROJECT_PLAN.md`, and `docs/LEARN.md`.
+
+Credential-pattern history scan: the 16 commits on the preserved local-history backup branch were scanned. The scan found a synthetic Bearer-header test fixture, but no Google-style API key, `sk-` token, or non-empty `LLM_API_KEY` assignment. This was not an exhaustive scan of every remote ref or all GitHub history.
